@@ -14,6 +14,8 @@ class LibraryService {
         case small, medium, large
     }
     
+    static let PAGINATION_LIMIT = 100
+    
     private let KEY_AUTHOR_NAME = "author_name"
     private let KEY_CONTRIBUTOR = "contributor"
     private let KEY_COVER_EDITION_KEY = "cover_edition_key"
@@ -26,14 +28,86 @@ class LibraryService {
     
     private let session = URLSession(configuration: .default)
     private var currentPagination = 1
+    private var previousInput = ""
+    
+    func fetchMoreResults(onResult: @escaping BooksCallback, onErrorMessage: @escaping StringCallback) {
+        guard previousInput.count > 0 else {
+            print("No previous input during 'more' search")
+            return
+        }
+        currentPagination += 1
+        
+        let formattedInput = getQueryStringFrom(
+            searchInput: previousInput,
+            currentPagination: currentPagination
+        )
+
+        print("About to query more results...")
+        performSearch(formattedSearchString: formattedInput, onResult: onResult, onErrorMessage: onErrorMessage)
+    }
     
     func fetchResultsOf(searchInput: String, onResult: @escaping BooksCallback, onErrorMessage: @escaping StringCallback) {
         guard searchInput.count > 0 else {
             return
         }
+        previousInput = searchInput
+        currentPagination = 1
         
-        let formattedInput = getQueryStringFrom(searchInput: searchInput)
-        guard let url = URL(string: "http://openlibrary.org/search.json?q=\(formattedInput)") else {
+        let formattedInput = getQueryStringFrom(
+            searchInput: searchInput,
+            currentPagination: currentPagination
+        )
+        
+        print("About to query new results...")
+        performSearch(formattedSearchString: formattedInput, onResult: onResult, onErrorMessage: onErrorMessage)
+    }
+    
+    private func getBookFrom(document: [String: Any]) -> Book {
+        let coverEditionKey = document[KEY_COVER_EDITION_KEY] as? String ?? ""
+        let publishYearRaw = document[KEY_FIRST_PUBLISH_YEAR] as? Int
+        let publishYearString = publishYearRaw != nil ? "\(publishYearRaw!)" : "n/a"
+        let numberOfEditionsRaw = document[KEY_EDITION_COUNT] as? Int
+        let numberOfEditionsString = numberOfEditionsRaw != nil ? "\(numberOfEditionsRaw!)" : "n/a"
+        return Book(title: document[KEY_TITLE] as? String ?? "n/a",
+                    author: (document[KEY_AUTHOR_NAME] as? [String])?.first ?? "n/a",
+                    firstPublished: publishYearString,
+                    largeCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .large),
+                    mediumCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .medium),
+                    smallCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .small),
+                    isbnNumbers: document[KEY_ISBN] as? [String] ?? [],
+                    contributors: document[KEY_CONTRIBUTOR] as? [String] ?? [],
+                    numberOfEditions: numberOfEditionsString,
+                    publishers: document[KEY_PUBLISHER] as? [String] ?? [])
+    }
+    
+    private func getErrorMessageFrom(httpStatusCode: Int) -> String {
+        switch httpStatusCode {
+        case 500...599:
+            return "There was an error with the server. Please try again later."
+        case 400...499:
+            return "Please check the format of your search and try again."
+        default:
+            return "Oops, there must be a bear attack at the library or something, please try again later."
+        }
+    }
+    
+    private func getQueryStringFrom(searchInput: String, currentPagination: Int) -> String {
+        return searchInput.replacingOccurrences(of: " ", with: "+") + "&page=\(currentPagination)"
+    }
+    
+    private func getUrlFor(coverEditionKey: String, size: CoverImageSize) -> String {
+        switch size {
+        case .small:
+            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-S.jpg"
+        case .medium:
+            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-M.jpg"
+        case .large:
+            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-L.jpg"
+        }
+    }
+    
+    private func performSearch(formattedSearchString: String, onResult: @escaping BooksCallback, onErrorMessage: @escaping StringCallback) {
+        guard let url = URL(string: "http://openlibrary.org/search.json?q=\(formattedSearchString)") else {
             print("Error creating URL from input")
             return
         }
@@ -74,50 +148,7 @@ class LibraryService {
         
         searchTask.resume()
     }
-    
-    private func getQueryStringFrom(searchInput: String) -> String {
-        return searchInput.replacingOccurrences(of: " ", with: "+") + "&page=\(currentPagination)"
-    }
-    
-    private func getErrorMessageFrom(httpStatusCode: Int) -> String {
-        switch httpStatusCode {
-        case 500...599:
-            return "There was an error with the server. Please try again later."
-        case 400...499:
-            return "Please check the format of your search and try again."
-        default:
-            return "Oops, there must be a bear attack at the library or something, please try again later."
-        }
-    }
-    
-    private func getBookFrom(document: [String: Any]) -> Book {
-        let coverEditionKey = document[KEY_COVER_EDITION_KEY] as? String ?? ""
-        let publishYearRaw = document[KEY_FIRST_PUBLISH_YEAR] as? Int
-        let publishYearString = publishYearRaw != nil ? "\(publishYearRaw!)" : "n/a"
-        let numberOfEditionsRaw = document[KEY_EDITION_COUNT] as? Int
-        let numberOfEditionsString = numberOfEditionsRaw != nil ? "\(numberOfEditionsRaw!)" : "n/a"
-        return Book(title: document[KEY_TITLE] as? String ?? "n/a",
-                    author: (document[KEY_AUTHOR_NAME] as? [String])?.first ?? "n/a",
-                    firstPublished: publishYearString,
-                    largeCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .large),
-                    mediumCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .medium),
-                    smallCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .small),
-                    isbnNumbers: document[KEY_ISBN] as? [String] ?? [],
-                    contributors: document[KEY_CONTRIBUTOR] as? [String] ?? [],
-                    numberOfEditions: numberOfEditionsString,
-                    publishers: document[KEY_PUBLISHER] as? [String] ?? [])
-    }
-    
-    private func getUrlFor(coverEditionKey: String, size: CoverImageSize) -> String {
-        switch size {
-        case .small:
-            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-S.jpg"
-        case .medium:
-            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-M.jpg"
-        case .large:
-            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-L.jpg"
-        }
-    }
+
 }
 
 struct Book {

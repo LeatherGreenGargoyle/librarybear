@@ -9,9 +9,10 @@
 import Foundation
 
 class SearchPresenter {
+    
+    private var currentSearchBufferTimer: Timer?
     private var libraryService: LibraryService?
     private weak var searchView: SearchViewController?
-    private var currentSearchBufferTimer: Timer?
     
     convenience init(libraryService: LibraryService, view: SearchViewController) {
         self.init()
@@ -30,17 +31,28 @@ class SearchPresenter {
                 self.libraryService?.fetchResultsOf(
                     searchInput: input,
                     onResult: self.handleSearchQuery,
-                    onErrorMessage: self.handleSearchQuery
+                    onErrorMessage: self.handleSearchError
             )
         })
-        
     }
     
-    private func handleSearchQuery(error: String) {
+    func handleWillDisplay(finalBook isFinalBook: Bool) {
+        guard isFinalBook else {
+            return
+        }
+        
+        libraryService?.fetchMoreResults(onResult: handleMore, onErrorMessage: handleSearchError)
+    }
+    
+    private func handleSearchError(error: String) {
         searchView?.onQuery(error: error)
     }
     
     private func handleSearchQuery(results: [Book]) {
         searchView?.onQuery(results: results)
+    }
+    
+    private func handleMore(results: [Book]) {
+        searchView?.onQuery(moreResults: results)
     }
 }

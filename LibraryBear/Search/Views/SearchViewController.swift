@@ -45,6 +45,14 @@ class SearchViewController: BaseViewController<SearchView> {
         }
     }
     
+    func onQuery(moreResults: [Book]) {
+        booksToDisplay.append(contentsOf: moreResults)
+        print("displaying more results...")
+        mainThread {
+            self.mainView.tableView.reloadData()
+        }
+    }
+    
     func showEmptyList() {
         booksToDisplay.removeAll(keepingCapacity: false)
         mainThread {
@@ -62,6 +70,10 @@ extension SearchViewController: SearchViewDelegate {
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        defer {
+            searchPresenter?.handleWillDisplay(finalBook: indexPath.row == booksToDisplay.count - 1)
+        }
+        
         guard indexPath.row <= booksToDisplay.count else {
             mainThread {
                 self.mainView.tableView.reloadData()
