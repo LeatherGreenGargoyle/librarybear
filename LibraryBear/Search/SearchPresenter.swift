@@ -11,6 +11,7 @@ import Foundation
 class SearchPresenter {
     private var libraryService: LibraryService?
     private weak var searchView: SearchViewController?
+    private var currentSearchBufferTimer: Timer?
     
     convenience init(libraryService: LibraryService, view: SearchViewController) {
         self.init()
@@ -19,7 +20,20 @@ class SearchPresenter {
     }
     
     func handleSearch(input: String) {
-        libraryService?.fetchResultsOf(searchInput: input, onResult: handleSearchQuery, onErrorMessage: handleSearchQuery)
+        guard input.count > 0 else {
+            searchView?.showEmptyList()
+            return
+        }
+        currentSearchBufferTimer?.invalidate()
+        
+        currentSearchBufferTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false, block: { _ in
+                self.libraryService?.fetchResultsOf(
+                    searchInput: input,
+                    onResult: self.handleSearchQuery,
+                    onErrorMessage: self.handleSearchQuery
+            )
+        })
+        
     }
     
     private func handleSearchQuery(error: String) {

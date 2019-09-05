@@ -7,5 +7,6 @@ target 'LibraryBear' do
 
   # Pods for LibraryBear
   pod 'SnapKit', '~> 5.0.0'
+  pod 'SDWebImage', '~> 5.0'
 
 end

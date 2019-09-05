@@ -26,7 +26,6 @@ class LibraryService {
     
     private let session = URLSession(configuration: .default)
     private var currentPagination = 1
-    private var currentInput = ""
     
     func fetchResultsOf(searchInput: String, onResult: @escaping BooksCallback, onErrorMessage: @escaping StringCallback) {
         guard searchInput.count > 0 else {
@@ -38,7 +37,7 @@ class LibraryService {
             print("Error creating URL from input")
             return
         }
-        print("Attempting to query input \(formattedInput)")
+        print("Attempting to query input \(url)")
         
         let searchTask = session.dataTask(with: url) { (data, response, error) in
             if let unwrappedError = error {
@@ -77,7 +76,7 @@ class LibraryService {
     }
     
     private func getQueryStringFrom(searchInput: String) -> String {
-        return searchInput.replacingOccurrences(of: " ", with: "+") + "$page=\(currentPagination)"
+        return searchInput.replacingOccurrences(of: " ", with: "+") + "&page=\(currentPagination)"
     }
     
     private func getErrorMessageFrom(httpStatusCode: Int) -> String {
