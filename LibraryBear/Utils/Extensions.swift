@@ -12,3 +12,11 @@ extension UIFont {
         return UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.regular)
     }
 }
+
+extension UIView {
+    func addSubviews(_ views: [UIView]) {
+        for view in views {
+            self.addSubview(view)
+        }
+    }
+}

@@ -10,5 +10,16 @@ import Foundation
 import UIKit
 
 class SearchViewController: BaseViewController<SearchView> {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        mainView.set(delegate: self)
+    }
+}
+
+extension SearchViewController: SearchViewDelegate {
+    func onSearch(input: String) {
+        print("input: \(input)")
+    }
+    
     
 }
