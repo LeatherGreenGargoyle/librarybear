@@ -9,3 +9,4 @@
 import Foundation
 typealias Callback = () -> ()
 typealias StringCallback = (String) -> ()
+typealias BooksCallback = ([Book]) -> ()

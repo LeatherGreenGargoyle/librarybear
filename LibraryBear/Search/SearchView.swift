@@ -31,7 +31,7 @@ class SearchView: UIView {
     }()
     
     // MARK: Members
-    private var delegate: SearchViewDelegate?
+    private weak var delegate: SearchViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

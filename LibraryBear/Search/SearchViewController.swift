@@ -10,16 +10,26 @@ import Foundation
 import UIKit
 
 class SearchViewController: BaseViewController<SearchView> {
-    var searchPresenter: SearchPresenter?
-    var libraryService: LibraryService?
+    private var searchPresenter: SearchPresenter?
+    private var libraryService: LibraryService?
+    private var booksToDisplay: [Book]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mainView.set(delegate: self)
         
         let newLibaryService = LibraryService()
-        searchPresenter = SearchPresenter(libraryService: newLibaryService)
+        searchPresenter = SearchPresenter(libraryService: newLibaryService, view: self)
         libraryService = newLibaryService
+    }
+    
+    func onQuery(error: String) {
+        // TODO: display user error message
+        print("Error received by SearchVC: \(error)")
+    }
+    
+    func onQuery(results: [Book]) {
+        booksToDisplay = results
     }
 }
 

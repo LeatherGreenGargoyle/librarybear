@@ -28,7 +28,7 @@ class LibraryService {
     private var currentPagination = 1
     private var currentInput = ""
     
-    func fetchResultsOf(searchInput: String, onErrorMessage: @escaping StringCallback) {
+    func fetchResultsOf(searchInput: String, onResult: @escaping BooksCallback, onErrorMessage: @escaping StringCallback) {
         guard searchInput.count > 0 else {
             return
         }
@@ -66,9 +66,10 @@ class LibraryService {
                 let books = booksRaw.map({ rawBook -> Book in
                     return self.getBookFrom(document: rawBook)
                 })
-                print("Data: \(books)")
+                onResult(books)
             } catch {
                 print("JSON error: \(error.localizedDescription)")
+                onErrorMessage("There was an issue with the server, please try again later.")
             }
         }
         
