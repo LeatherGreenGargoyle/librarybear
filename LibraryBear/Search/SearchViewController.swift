@@ -10,16 +10,21 @@ import Foundation
 import UIKit
 
 class SearchViewController: BaseViewController<SearchView> {
+    var searchPresenter: SearchPresenter?
+    var libraryService: LibraryService?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         mainView.set(delegate: self)
+        
+        let newLibaryService = LibraryService()
+        searchPresenter = SearchPresenter(libraryService: newLibaryService)
+        libraryService = newLibaryService
     }
 }
 
 extension SearchViewController: SearchViewDelegate {
     func onSearch(input: String) {
-        print("input: \(input)")
+        searchPresenter?.handleSearch(input: input)
     }
-    
-    
 }

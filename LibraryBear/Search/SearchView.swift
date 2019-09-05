@@ -36,7 +36,7 @@ class SearchView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubviews([header, searchField])
-        searchField.addTarget(self, action: #selector(onSearchInput), for: .editingChanged)
+        searchField.addTarget(self, action: #selector(searchInputted), for: .editingChanged)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -59,7 +59,7 @@ class SearchView: UIView {
         self.delegate = delegate
     }
     
-    @objc func onSearchInput(_ textField: UITextField) {
+    @objc func searchInputted(_ textField: UITextField) {
         guard let delegate = delegate else {
             print("Missing delegate")
             return
