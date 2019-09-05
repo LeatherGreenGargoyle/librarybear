@@ -3,25 +3,33 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		08A049C1C47125A4F6CDD10E /* Pods_LibraryBear.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3AB9F33AF4BE82A29C445A0 /* Pods_LibraryBear.framework */; };
+		A40CA5A72320C58F00A6866A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5A62320C58F00A6866A /* TabBarController.swift */; };
+		A40CA5AB2320C60300A6866A /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5AA2320C60300A6866A /* BaseViewController.swift */; };
+		A40CA5AF2320C7BA00A6866A /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5AE2320C7BA00A6866A /* SearchView.swift */; };
+		A40CA5B22320C93B00A6866A /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5B12320C93B00A6866A /* Extensions.swift */; };
+		A40CA5B42320C9B900A6866A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5B32320C9B900A6866A /* SearchViewController.swift */; };
+		A40CA5B72320CA3000A6866A /* WishlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5B62320CA3000A6866A /* WishlistView.swift */; };
+		A40CA5B92320CA6E00A6866A /* WishlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5B82320CA6E00A6866A /* WishlistViewController.swift */; };
 		A4C4E2572320C1AF00A403F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C4E2562320C1AF00A403F8 /* AppDelegate.swift */; };
-		A4C4E2592320C1AF00A403F8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C4E2582320C1AF00A403F8 /* ViewController.swift */; };
-		A4C4E25C2320C1AF00A403F8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4C4E25A2320C1AF00A403F8 /* Main.storyboard */; };
 		A4C4E25E2320C1B000A403F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4C4E25D2320C1B000A403F8 /* Assets.xcassets */; };
-		A4C4E2612320C1B000A403F8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A4C4E25F2320C1B000A403F8 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A40CA5A62320C58F00A6866A /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		A40CA5AA2320C60300A6866A /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		A40CA5AE2320C7BA00A6866A /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		A40CA5B12320C93B00A6866A /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		A40CA5B32320C9B900A6866A /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		A40CA5B62320CA3000A6866A /* WishlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistView.swift; sourceTree = "<group>"; };
+		A40CA5B82320CA6E00A6866A /* WishlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistViewController.swift; sourceTree = "<group>"; };
 		A4C4E2532320C1AF00A403F8 /* LibraryBear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibraryBear.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4C4E2562320C1AF00A403F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A4C4E2582320C1AF00A403F8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		A4C4E25B2320C1AF00A403F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A4C4E25D2320C1B000A403F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A4C4E2602320C1B000A403F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A4C4E2622320C1B000A403F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B98E882213F9E38D2EA5FB1F /* Pods-LibraryBear.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LibraryBear.debug.xcconfig"; path = "Target Support Files/Pods-LibraryBear/Pods-LibraryBear.debug.xcconfig"; sourceTree = "<group>"; };
 		C3AB9F33AF4BE82A29C445A0 /* Pods_LibraryBear.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_LibraryBear.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,7 +54,6 @@
 				B98E882213F9E38D2EA5FB1F /* Pods-LibraryBear.debug.xcconfig */,
 				D65B9A4652C7A66E6CDABF05 /* Pods-LibraryBear.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -56,6 +63,40 @@
 				C3AB9F33AF4BE82A29C445A0 /* Pods_LibraryBear.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A40CA5A82320C5DC00A6866A /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				A40CA5AE2320C7BA00A6866A /* SearchView.swift */,
+				A40CA5B32320C9B900A6866A /* SearchViewController.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		A40CA5A92320C5F200A6866A /* BaseClasses */ = {
+			isa = PBXGroup;
+			children = (
+				A40CA5AA2320C60300A6866A /* BaseViewController.swift */,
+			);
+			path = BaseClasses;
+			sourceTree = "<group>";
+		};
+		A40CA5B02320C92C00A6866A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A40CA5B12320C93B00A6866A /* Extensions.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		A40CA5B52320CA1400A6866A /* Wishlist */ = {
+			isa = PBXGroup;
+			children = (
+				A40CA5B62320CA3000A6866A /* WishlistView.swift */,
+				A40CA5B82320CA6E00A6866A /* WishlistViewController.swift */,
+			);
+			path = Wishlist;
 			sourceTree = "<group>";
 		};
 		A4C4E24A2320C1AF00A403F8 = {
@@ -79,12 +120,14 @@
 		A4C4E2552320C1AF00A403F8 /* LibraryBear */ = {
 			isa = PBXGroup;
 			children = (
+				A40CA5A92320C5F200A6866A /* BaseClasses */,
+				A40CA5A82320C5DC00A6866A /* Search */,
+				A40CA5B52320CA1400A6866A /* Wishlist */,
+				A40CA5B02320C92C00A6866A /* Utils */,
 				A4C4E2562320C1AF00A403F8 /* AppDelegate.swift */,
-				A4C4E2582320C1AF00A403F8 /* ViewController.swift */,
-				A4C4E25A2320C1AF00A403F8 /* Main.storyboard */,
 				A4C4E25D2320C1B000A403F8 /* Assets.xcassets */,
-				A4C4E25F2320C1B000A403F8 /* LaunchScreen.storyboard */,
 				A4C4E2622320C1B000A403F8 /* Info.plist */,
+				A40CA5A62320C58F00A6866A /* TabBarController.swift */,
 			);
 			path = LibraryBear;
 			sourceTree = "<group>";
@@ -149,9 +192,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4C4E2612320C1B000A403F8 /* LaunchScreen.storyboard in Resources */,
 				A4C4E25E2320C1B000A403F8 /* Assets.xcassets in Resources */,
-				A4C4E25C2320C1AF00A403F8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,31 +245,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4C4E2592320C1AF00A403F8 /* ViewController.swift in Sources */,
+				A40CA5AF2320C7BA00A6866A /* SearchView.swift in Sources */,
+				A40CA5B42320C9B900A6866A /* SearchViewController.swift in Sources */,
+				A40CA5B22320C93B00A6866A /* Extensions.swift in Sources */,
+				A40CA5A72320C58F00A6866A /* TabBarController.swift in Sources */,
+				A40CA5B92320CA6E00A6866A /* WishlistViewController.swift in Sources */,
+				A40CA5AB2320C60300A6866A /* BaseViewController.swift in Sources */,
 				A4C4E2572320C1AF00A403F8 /* AppDelegate.swift in Sources */,
+				A40CA5B72320CA3000A6866A /* WishlistView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		A4C4E25A2320C1AF00A403F8 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A4C4E25B2320C1AF00A403F8 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		A4C4E25F2320C1B000A403F8 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A4C4E2602320C1B000A403F8 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		A4C4E2632320C1B000A403F8 /* Debug */ = {
