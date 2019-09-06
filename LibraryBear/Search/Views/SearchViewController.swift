@@ -13,7 +13,6 @@ class SearchViewController: BaseViewController<SearchView> {
     private let REUSE_ID_BOOK_CELL = "bookTableViewCell"
     
     private var searchPresenter: SearchPresenter?
-    private var libraryService: LibraryService?
     private var booksToDisplay: [Book] = []
     
     override func viewDidLoad() {
@@ -21,12 +20,15 @@ class SearchViewController: BaseViewController<SearchView> {
         mainView.set(delegate: self)
         mainView.tableView.register(BookTableViewCell.self, forCellReuseIdentifier: REUSE_ID_BOOK_CELL)
         mainView.tableView.rowHeight = 100
-        mainView.set(tableDataSource: self)
-        mainView.set(delegate: self)
+        mainView.tableView.allowsSelection = true
+        mainView.tableView.delegate = self
+        mainView.tableView.dataSource = self
         
         let newLibaryService = LibraryService()
-        searchPresenter = SearchPresenter(libraryService: newLibaryService, view: self)
-        libraryService = newLibaryService
+        searchPresenter = SearchPresenter(
+            libraryService: newLibaryService,
+            view: self
+        )
     }
     
     func onQuery(error: String) {
@@ -87,8 +89,8 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         
         let book = booksToDisplay[indexPath.row]
         cell.set(title: book.title)
-        cell.set(author: book.author)
-        if let url = URL(string: book.mediumCoverURL) {
+        cell.set(authors: book.getAuthorSerialString())
+        if let url = book.mediumCoverURL {
             cell.set(coverURL: url)
         }
         cell.set(publishDate: book.firstPublished)
@@ -97,7 +99,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // TODO: show details modal
+        let book = booksToDisplay[indexPath.row]
+        guard let navigationController = navigationController else {
+            print("Missing SearchNavigationController")
+            return
+        }
+        navigationController.pushViewController(BookDetailsViewController(bookToDisplay: book), animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

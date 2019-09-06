@@ -20,6 +20,10 @@
 		A40CA5C02320DE0500A6866A /* SearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5BF2320DE0500A6866A /* SearchPresenter.swift */; };
 		A40CA5C52320FC6100A6866A /* BookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5C42320FC6100A6866A /* BookTableViewCell.swift */; };
 		A40CA5C72321095800A6866A /* GlobalFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5C62321095800A6866A /* GlobalFunctions.swift */; };
+		A40CA5CA23219DE700A6866A /* BookDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5C923219DE700A6866A /* BookDetailsView.swift */; };
+		A40CA5CC232206C000A6866A /* BookDetailsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5CB232206C000A6866A /* BookDetailsPresenter.swift */; };
+		A40CA5CE232206DE00A6866A /* BookDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5CD232206DE00A6866A /* BookDetailsViewController.swift */; };
+		A40CA5D02322080900A6866A /* LocalDBService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5CF2322080900A6866A /* LocalDBService.swift */; };
 		A4C4E2572320C1AF00A403F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C4E2562320C1AF00A403F8 /* AppDelegate.swift */; };
 		A4C4E25E2320C1B000A403F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4C4E25D2320C1B000A403F8 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -37,6 +41,10 @@
 		A40CA5BF2320DE0500A6866A /* SearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPresenter.swift; sourceTree = "<group>"; };
 		A40CA5C42320FC6100A6866A /* BookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookTableViewCell.swift; sourceTree = "<group>"; };
 		A40CA5C62321095800A6866A /* GlobalFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalFunctions.swift; sourceTree = "<group>"; };
+		A40CA5C923219DE700A6866A /* BookDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailsView.swift; sourceTree = "<group>"; };
+		A40CA5CB232206C000A6866A /* BookDetailsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailsPresenter.swift; sourceTree = "<group>"; };
+		A40CA5CD232206DE00A6866A /* BookDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailsViewController.swift; sourceTree = "<group>"; };
+		A40CA5CF2322080900A6866A /* LocalDBService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDBService.swift; sourceTree = "<group>"; };
 		A4C4E2532320C1AF00A403F8 /* LibraryBear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibraryBear.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4C4E2562320C1AF00A403F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A4C4E25D2320C1B000A403F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -115,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				A40CA5BB2320D69800A6866A /* LibraryService.swift */,
+				A40CA5CF2322080900A6866A /* LocalDBService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -127,6 +136,16 @@
 				A40CA5C42320FC6100A6866A /* BookTableViewCell.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A40CA5C823219DCB00A6866A /* BookDetails */ = {
+			isa = PBXGroup;
+			children = (
+				A40CA5C923219DE700A6866A /* BookDetailsView.swift */,
+				A40CA5CB232206C000A6866A /* BookDetailsPresenter.swift */,
+				A40CA5CD232206DE00A6866A /* BookDetailsViewController.swift */,
+			);
+			path = BookDetails;
 			sourceTree = "<group>";
 		};
 		A4C4E24A2320C1AF00A403F8 = {
@@ -150,6 +169,7 @@
 		A4C4E2552320C1AF00A403F8 /* LibraryBear */ = {
 			isa = PBXGroup;
 			children = (
+				A40CA5C823219DCB00A6866A /* BookDetails */,
 				A40CA5A92320C5F200A6866A /* BaseClasses */,
 				A40CA5BA2320D65D00A6866A /* Services */,
 				A40CA5A82320C5DC00A6866A /* Search */,
@@ -284,10 +304,14 @@
 				A40CA5BC2320D69800A6866A /* LibraryService.swift in Sources */,
 				A40CA5A72320C58F00A6866A /* TabBarController.swift in Sources */,
 				A40CA5B92320CA6E00A6866A /* WishlistViewController.swift in Sources */,
+				A40CA5CC232206C000A6866A /* BookDetailsPresenter.swift in Sources */,
+				A40CA5CA23219DE700A6866A /* BookDetailsView.swift in Sources */,
+				A40CA5CE232206DE00A6866A /* BookDetailsViewController.swift in Sources */,
 				A40CA5AB2320C60300A6866A /* BaseViewController.swift in Sources */,
 				A4C4E2572320C1AF00A403F8 /* AppDelegate.swift in Sources */,
 				A40CA5BE2320D72900A6866A /* TypeAliases.swift in Sources */,
 				A40CA5B72320CA3000A6866A /* WishlistView.swift in Sources */,
+				A40CA5D02322080900A6866A /* LocalDBService.swift in Sources */,
 				A40CA5C72321095800A6866A /* GlobalFunctions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

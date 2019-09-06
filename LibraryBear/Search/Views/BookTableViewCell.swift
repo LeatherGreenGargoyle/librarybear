@@ -64,8 +64,8 @@ class BookTableViewCell: UITableViewCell {
         bookTitle.text = title
     }
     
-    func set(author: String) {
-        authorLabel.text = "by \(author)"
+    func set(authors: String) {
+        authorLabel.text = "by \(authors)"
     }
     
     func set(publishDate: String) {

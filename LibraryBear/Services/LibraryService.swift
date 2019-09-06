@@ -69,7 +69,7 @@ class LibraryService {
         let numberOfEditionsRaw = document[KEY_EDITION_COUNT] as? Int
         let numberOfEditionsString = numberOfEditionsRaw != nil ? "\(numberOfEditionsRaw!)" : "n/a"
         return Book(title: document[KEY_TITLE] as? String ?? "n/a",
-                    author: (document[KEY_AUTHOR_NAME] as? [String])?.first ?? "n/a",
+                    authors: (document[KEY_AUTHOR_NAME] as? [String]) ?? [],
                     firstPublished: publishYearString,
                     largeCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .large),
                     mediumCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .medium),
@@ -95,14 +95,14 @@ class LibraryService {
         return searchInput.replacingOccurrences(of: " ", with: "+") + "&page=\(currentPagination)"
     }
     
-    private func getUrlFor(coverEditionKey: String, size: CoverImageSize) -> String {
+    private func getUrlFor(coverEditionKey: String, size: CoverImageSize) -> URL? {
         switch size {
         case .small:
-            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-S.jpg"
+            return URL(string: "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-S.jpg")
         case .medium:
-            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-M.jpg"
+            return URL(string: "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-M.jpg")
         case .large:
-            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-L.jpg"
+            return URL(string: "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-L.jpg")
         }
     }
     
@@ -153,13 +153,26 @@ class LibraryService {
 
 struct Book {
     let title: String
-    let author: String
+    let authors: [String]
     let firstPublished: String
-    let largeCoverURL: String
-    let mediumCoverURL: String
-    let smallCoverURL: String
+    let largeCoverURL: URL?
+    let mediumCoverURL: URL?
+    let smallCoverURL: URL?
     let isbnNumbers: [String]
     let contributors: [String]
     let numberOfEditions: String
     let publishers: [String]
+    
+    func getAuthorSerialString() -> String {
+        return authors.getSerialString()
+    }
+    func getISBNSerialString() -> String {
+        return isbnNumbers.getSerialString()
+    }
+    func getContributerSerialString() -> String {
+        return contributors.getSerialString()
+    }
+    func getPublishersSerialString() -> String {
+        return publishers.getSerialString()
+    }
 }

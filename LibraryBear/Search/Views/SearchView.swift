@@ -42,26 +42,22 @@ class SearchView: UIView {
         super.init(frame: frame)
         self.addSubviews([header, searchField, tableView])
         searchField.addTarget(self, action: #selector(searchInputted), for: .editingChanged)
+        
+        header.snp.makeConstraints { (make) in
+            make.top.leading.trailing.equalToSuperview()
+        }
+        searchField.snp.makeConstraints { (make) in
+            make.top.equalTo(header.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+        }
+        tableView.snp.makeConstraints { (make) in
+            make.top.equalTo(searchField.snp.bottom)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-    
-    override func updateConstraints() {
-        super.updateConstraints()
-        
-        header.snp.updateConstraints { (make) in
-            make.top.leading.trailing.equalToSuperview()
-        }
-        searchField.snp.updateConstraints { (make) in
-            make.top.equalTo(header.snp.bottom)
-            make.leading.trailing.equalToSuperview()
-        }
-        tableView.snp.updateConstraints { (make) in
-            make.top.equalTo(searchField.snp.bottom)
-            make.leading.trailing.bottom.equalToSuperview()
-        }
     }
     
     func set(delegate: SearchViewDelegate) {
@@ -74,16 +70,5 @@ class SearchView: UIView {
             return
         }
         delegate.onSearch(input: textField.text ?? "")
-    }
-}
-
-// MARK: Table Logic
-extension SearchView {
-    func set(tableDataSource: UITableViewDataSource) {
-        tableView.dataSource = tableDataSource
-    }
-    
-    func set(tableDelegate: UITableViewDelegate) {
-        tableView.delegate = tableDelegate
     }
 }

@@ -21,10 +21,13 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let searchNavigationController = UINavigationController()
+        searchNavigationController.addChild(searchViewController)
+        searchNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: TabIndex.search.rawValue)
+        let wishListNavigationController = UINavigationController()
+        wishListNavigationController.addChild(wishListViewController)
+        wishListNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: TabIndex.search.rawValue)
         
-        searchViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: TabIndex.search.rawValue)
-        wishListViewController.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: TabIndex.search.rawValue)
-        
-        viewControllers = [searchViewController, wishListViewController]
+        viewControllers = [searchNavigationController, wishListNavigationController]
     }
 }
