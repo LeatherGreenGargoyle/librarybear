@@ -12,18 +12,36 @@ class SearchPresenter {
     
     private var currentSearchBufferTimer: Timer?
     private var libraryService: LibraryService?
-    private weak var searchView: SearchViewController?
+    private weak var view: SearchViewDelegate?
     private var isCurrentlyFetchingMore = false
+    private var booksToDisplay: [Book] = []
     
-    convenience init(libraryService: LibraryService, view: SearchViewController) {
+    convenience init(libraryService: LibraryService, view: SearchViewDelegate) {
         self.init()
         self.libraryService = libraryService
-        self.searchView = view
+        self.view = view
+    }
+    
+    func handleBookClickAt(row: Int) {
+        guard let view = view else {
+            print("ViewDelegate nil in handleBookClick")
+            return
+        }
+        guard row <= booksToDisplay.count else {
+            print("didSelectItem at a row greater than data count")
+            return
+        }
+        let book = booksToDisplay[row]
+        view.showDetailsViewFor(book: book)
     }
     
     func handleSearch(input: String) {
+        guard let view = view else {
+            print("ViewDelegate nil in handleSearchError")
+            return
+        }
         guard input.count > 0 else {
-            searchView?.showEmptyList()
+            view.showEmptyList()
             return
         }
         currentSearchBufferTimer?.invalidate()
@@ -37,8 +55,9 @@ class SearchPresenter {
         })
     }
     
-    func handleWillDisplay(finalBook isFinalBook: Bool) {
-        guard isFinalBook, !isCurrentlyFetchingMore else {
+    func handleWillDisplay(row: Int) {
+        let shouldFetchMore = row >= booksToDisplay.count - 20
+        guard shouldFetchMore, !isCurrentlyFetchingMore else {
             return
         }
         
@@ -47,16 +66,44 @@ class SearchPresenter {
         libraryService?.fetchMoreResults(onResult: handleMore, onErrorMessage: handleSearchError)
     }
     
+    func getFetchedBook(at index: Int) -> Book? {
+        guard index <= booksToDisplay.count else {
+            return nil
+        }
+        
+        return booksToDisplay[index]
+    }
+    
+    func getBookCount() -> Int {
+        return booksToDisplay.count
+    }
+    
     private func handleSearchError(error: String) {
-        searchView?.onQuery(error: error)
+        guard let view = view else {
+            print("ViewDelegate nil in handleSearchError")
+            return
+        }
+        booksToDisplay.removeAll()
+        view.refreshTable()
+        view.showSearchErrorAlert(message: "Hmm...", title: "We couldn't complete your search right now, please try again later.")
     }
     
     private func handleSearchQuery(results: [Book]) {
-        searchView?.onQuery(results: results)
+        guard let view = view else {
+            print("ViewDelegate nil in handleSearchError")
+            return
+        }
+        booksToDisplay = results
+        view.refreshTable()
     }
     
     private func handleMore(results: [Book]) {
+        guard let view = view else {
+            print("ViewDelegate nil in handleSearchError")
+            return
+        }
+        booksToDisplay.append(contentsOf: results)
         isCurrentlyFetchingMore = false
-        searchView?.onQuery(moreResults: results)
+        view.refreshTable()
     }
 }

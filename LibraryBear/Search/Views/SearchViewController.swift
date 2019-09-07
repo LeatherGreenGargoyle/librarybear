@@ -9,19 +9,27 @@
 import Foundation
 import UIKit
 
-class SearchViewController: BaseViewController<SearchView> {
-    
+protocol SearchViewDelegate: class {
+    func refreshTable()
+    func showEmptyList()
+    func showSearchErrorAlert(message: String, title: String)
+    func showDetailsViewFor(book: Book)
+}
+
+class SearchViewController: BaseViewController<SearchView>, SearchViewDelegate {
+
     private var searchPresenter: SearchPresenter?
-    private var booksToDisplay: [Book] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        mainView.set(delegate: self)
         mainView.collectionView.dataSource = self
         mainView.collectionView.delegate = self
         mainView.collectionView.register(BookCellView.self, forCellWithReuseIdentifier: BookCellView.identifier)
         mainView.collectionView.alwaysBounceVertical = true
         mainView.collectionView.backgroundColor = .white
+        mainView.searchField.addTarget(
+            self, action: #selector(searchInputted), for: .editingChanged
+        )
         
         let newLibaryService = LibraryService()
         searchPresenter = SearchPresenter(
@@ -30,41 +38,39 @@ class SearchViewController: BaseViewController<SearchView> {
         )
     }
     
-    func onQuery(error: String) {
-        // TODO: display user error message
-        print("Error received by SearchVC: \(error)")
-        booksToDisplay.removeAll(keepingCapacity: false)
-        mainThread {
-            self.mainView.collectionView.reloadData()
-        }
-    }
-    
-    func onQuery(results: [Book]) {
-        booksToDisplay = results
-        mainThread {
-            self.mainView.collectionView.reloadData()
-        }
-    }
-    
-    func onQuery(moreResults: [Book]) {
-        booksToDisplay.append(contentsOf: moreResults)
-        print("displaying more results...")
-        mainThread {
-            self.mainView.collectionView.reloadData()
-        }
+    func showSearchErrorAlert(message: String, title: String) {
+        showAlert(title: title, message: message)
     }
     
     func showEmptyList() {
-        booksToDisplay.removeAll(keepingCapacity: false)
+        // TODO
+    }
+    
+    func refreshTable() {
         mainThread {
             self.mainView.collectionView.reloadData()
         }
     }
-}
-
-extension SearchViewController: SearchViewDelegate {
-    func onSearch(input: String) {
-        searchPresenter?.handleSearch(input: input)
+    
+    func showDetailsViewFor(book: Book) {
+        guard let navigationController = navigationController else {
+            print("Missing SearchNavigationController")
+            return
+        }
+        
+        navigationController.pushViewController(
+            BookDetailsViewController(bookToDisplay: book, isLocal: false),
+            animated: true
+        )
+    }
+    
+    @objc private func searchInputted(_ textField: UITextField) {
+        guard let searchPresenter = searchPresenter else {
+            print("Missing SearchPresenter on searchInputted")
+            return
+        }
+        
+        searchPresenter.handleSearch(input: textField.text ?? "")
     }
 }
 
@@ -72,22 +78,33 @@ extension SearchViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return booksToDisplay.count
+        guard let searchPresenter = searchPresenter else {
+            print("Missing SearchPresenter on searchInputted")
+            return 0
+        }
+        
+        return searchPresenter.getBookCount()
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let searchPresenter = searchPresenter else {
+            print("Missing SearchPresenter on cellForItemAt")
+            return UICollectionViewCell()
+        }
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCellView.identifier,
                                                             for: indexPath) as? BookCellView else {
             print("Unable to dequeue BookCellView")
             return UICollectionViewCell()
         }
-        
-        defer {
-            searchPresenter?.handleWillDisplay(finalBook: indexPath.row >= booksToDisplay.count - 20)
+        guard let book = searchPresenter.getFetchedBook(at: indexPath.row) else {
+            return UICollectionViewCell()
         }
         
-        let book = booksToDisplay[indexPath.item]
+        defer {
+            searchPresenter.handleWillDisplay(row: indexPath.row)
+        }
+        
         cell.set(
             title: book.getTitle(),
             author: book.getAbbreviatedAuthorSerialString(),
@@ -103,17 +120,11 @@ extension SearchViewController: UICollectionViewDataSource {
 extension SearchViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard indexPath.row <= booksToDisplay.count else {
-            print("didSelectItem at a row greater than data count")
+        guard let searchPresenter = searchPresenter else {
+            print("Missing SearchPresenter on didSelectItemAt")
             return
         }
-        guard let navigationController = navigationController else {
-            print("Missing SearchNavigationController")
-            return
-        }
-        let book = booksToDisplay[indexPath.row]
-        navigationController.pushViewController(BookDetailsViewController(bookToDisplay: book, isLocal: false), animated: true)
-
+        searchPresenter.handleBookClickAt(row: indexPath.row)
     }
 }
 

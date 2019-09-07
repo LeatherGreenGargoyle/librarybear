@@ -10,10 +10,6 @@ import Foundation
 import SnapKit
 import UIKit
 
-protocol SearchViewDelegate: class {
-    func onSearch(input: String)
-}
-
 class SearchView: UIView {
     // MARK: Subviews
     private let header: UILabel = {
@@ -22,7 +18,7 @@ class SearchView: UIView {
         label.font = .regular14
         return label
     }()
-    private let searchField: UITextField = {
+    let searchField: UITextField = {
         let textField = UITextField()
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
@@ -34,13 +30,9 @@ class SearchView: UIView {
         return collectionView
     }()
     
-    // MARK: Members
-    private weak var delegate: SearchViewDelegate?
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubviews([header, searchField, collectionView])
-        searchField.addTarget(self, action: #selector(searchInputted), for: .editingChanged)
         
         header.snp.makeConstraints { (make) in
             make.top.leading.trailing.equalToSuperview()
@@ -57,17 +49,5 @@ class SearchView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-    
-    func set(delegate: SearchViewDelegate) {
-        self.delegate = delegate
-    }
-    
-    @objc func searchInputted(_ textField: UITextField) {
-        guard let delegate = delegate else {
-            print("Missing delegate")
-            return
-        }
-        delegate.onSearch(input: textField.text ?? "")
     }
 }
