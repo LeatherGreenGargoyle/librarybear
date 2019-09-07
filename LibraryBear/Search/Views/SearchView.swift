@@ -31,7 +31,6 @@ class SearchView: UIView {
     }()
     let tableView: UITableView = {
         let tableView = UITableView()
-        
         return tableView
     }()
     

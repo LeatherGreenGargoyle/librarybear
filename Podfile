@@ -6,6 +6,7 @@ target 'LibraryBear' do
   use_frameworks!
 
   # Pods for LibraryBear
+  pod 'RealmSwift'
   pod 'SnapKit', '~> 5.0.0'
   pod 'SDWebImage', '~> 5.0'
 

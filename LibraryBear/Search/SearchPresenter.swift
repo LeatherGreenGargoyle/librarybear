@@ -27,7 +27,7 @@ class SearchPresenter {
         }
         currentSearchBufferTimer?.invalidate()
         
-        currentSearchBufferTimer = Timer.scheduledTimer(withTimeInterval: 1.5, repeats: false, block: { _ in
+        currentSearchBufferTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: { _ in
                 self.libraryService?.fetchResultsOf(
                     searchInput: input,
                     onResult: self.handleSearchQuery,

@@ -10,10 +10,6 @@ import Foundation
 import SnapKit
 import UIKit
 
-protocol BookDetailsViewDelegate: class {
-    func onActionButtonPress()
-}
-
 class BookDetailsView: UIScrollView {
     private let coverImage: UIImageView = {
         let imageView = UIImageView()
@@ -84,13 +80,11 @@ class BookDetailsView: UIScrollView {
         label.textAlignment = .center
         return label
     }()
-    private let actionButton: UIButton = {
+    let saveButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .gray
         return button
     }()
-    
-    private weak var bookDetailsViewdelegate: BookDetailsViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -100,7 +94,7 @@ class BookDetailsView: UIScrollView {
                           isbnLabel, isbnList, contributorsLabel, contributorsList,
                           numberOfEditions,
                           publishersLabel, publishersList,
-                          actionButton])
+                          saveButton])
         
         coverImage.snp.makeConstraints { (make) in
             make.leading.top.trailing.equalToSuperview()
@@ -162,9 +156,9 @@ class BookDetailsView: UIScrollView {
             make.top.equalTo(publishersLabel.snp.bottom)
             make.leading.trailing.equalToSuperview().offset(8)
             make.width.equalTo(UIScreen.main.bounds.width)
-            make.bottom.equalTo(actionButton.snp.top)
+            make.bottom.equalTo(saveButton.snp.top)
         }
-        actionButton.snp.makeConstraints { (make) in
+        saveButton.snp.makeConstraints { (make) in
             make.top.equalTo(publishersList.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(50)
@@ -175,9 +169,6 @@ class BookDetailsView: UIScrollView {
         super.init(coder: aDecoder)
     }
     
-    func set(delegate: BookDetailsViewDelegate) {
-        self.bookDetailsViewdelegate = delegate
-    }
     func setCoverImage(url: URL) {
         coverImage.sd_setImage(with: url, placeholderImage: nil)
     }
@@ -204,17 +195,5 @@ class BookDetailsView: UIScrollView {
     func set(publishersList: String) {
         print(publishersList)
         self.publishersList.text = publishersList
-    }
-    func setButton(title: String, handler: Callback) {
-        actionButton.setTitle(title, for: .normal)
-        actionButton.addTarget(self, action: #selector(onButtonPress), for: .touchUpInside)
-    }
-    
-    @objc private func onButtonPress() {
-        guard let delegate = self.bookDetailsViewdelegate else {
-            print("BookViewDelegate not set")
-            return
-        }
-        delegate.onActionButtonPress()
     }
 }

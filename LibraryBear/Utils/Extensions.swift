@@ -36,3 +36,14 @@ extension UIView {
         }
     }
 }
+
+extension UIViewController {
+    func showAlert(title: String,
+                   message: String = "",
+                   buttonTitle: String = "OK",
+                   buttonHandler: ((UIAlertAction) -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: buttonTitle, style: .cancel, handler: buttonHandler ?? nil))
+        present(alert, animated: true)
+    }
+}

@@ -88,12 +88,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         let book = booksToDisplay[indexPath.row]
-        cell.set(title: book.title)
+        cell.set(title: book.getTitle())
         cell.set(authors: book.getAuthorSerialString())
-        if let url = book.mediumCoverURL {
+        if let url = book.getMediumCoverURL() {
             cell.set(coverURL: url)
         }
-        cell.set(publishDate: book.firstPublished)
+        cell.set(publishDate: book.getFirstPublished())
         
         return cell
     }

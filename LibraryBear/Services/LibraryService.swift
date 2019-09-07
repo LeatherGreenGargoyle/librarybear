@@ -68,7 +68,7 @@ class LibraryService {
         let publishYearString = publishYearRaw != nil ? "\(publishYearRaw!)" : "n/a"
         let numberOfEditionsRaw = document[KEY_EDITION_COUNT] as? Int
         let numberOfEditionsString = numberOfEditionsRaw != nil ? "\(numberOfEditionsRaw!)" : "n/a"
-        return Book(title: document[KEY_TITLE] as? String ?? "n/a",
+        return NonLocalBook(title: document[KEY_TITLE] as? String ?? "n/a",
                     authors: (document[KEY_AUTHOR_NAME] as? [String]) ?? [],
                     firstPublished: publishYearString,
                     largeCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .large),
@@ -147,32 +147,5 @@ class LibraryService {
         }
         
         searchTask.resume()
-    }
-
-}
-
-struct Book {
-    let title: String
-    let authors: [String]
-    let firstPublished: String
-    let largeCoverURL: URL?
-    let mediumCoverURL: URL?
-    let smallCoverURL: URL?
-    let isbnNumbers: [String]
-    let contributors: [String]
-    let numberOfEditions: String
-    let publishers: [String]
-    
-    func getAuthorSerialString() -> String {
-        return authors.getSerialString()
-    }
-    func getISBNSerialString() -> String {
-        return isbnNumbers.getSerialString()
-    }
-    func getContributerSerialString() -> String {
-        return contributors.getSerialString()
-    }
-    func getPublishersSerialString() -> String {
-        return publishers.getSerialString()
     }
 }

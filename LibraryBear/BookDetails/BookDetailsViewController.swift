@@ -8,7 +8,14 @@
 
 import Foundation
 
-class BookDetailsViewController: BaseViewController<BookDetailsView> {
+protocol BookDetailsViewDelegate: class {
+    func dismissBookDetailsView()
+    func showSaveErrorAlert(message: String, title: String)
+    func showSaveSuccessAlert(message: String, title: String, then callback: @escaping Callback)
+}
+
+class BookDetailsViewController: BaseViewController<BookDetailsView>, BookDetailsViewDelegate {
+    
     private var bookDetailsPresenter: BookDetailsPresenter?
     
     convenience init(bookToDisplay: Book) {
@@ -18,21 +25,48 @@ class BookDetailsViewController: BaseViewController<BookDetailsView> {
         
         let newBookDetailsPresenter = BookDetailsPresenter(
             localDBService: newLocalDBService,
-            bookDetailsView: self
+            book: bookToDisplay,
+            delegate: self
         )
         bookDetailsPresenter = newBookDetailsPresenter
         
-        if let url = bookToDisplay.largeCoverURL {
+        if let url = bookToDisplay.getLargeCoverURL() {
             mainView.setCoverImage(url: url)
         }
-        mainView.set(delegate: newBookDetailsPresenter)
-        mainView.set(title: bookToDisplay.title)
+        mainView.set(title: bookToDisplay.getTitle())
         mainView.set(authors: bookToDisplay.getAuthorSerialString())
         mainView.set(isbnList: bookToDisplay.getISBNSerialString())
         mainView.set(publishersList: bookToDisplay.getPublishersSerialString())
-        mainView.set(publishingDate: bookToDisplay.firstPublished)
-        mainView.set(contributorsList: bookToDisplay.getContributerSerialString())
-        mainView.set(numberOfEditions: bookToDisplay.numberOfEditions)
-        mainView.setButton(title: "SAVE", handler: {})
+        mainView.set(publishingDate: bookToDisplay.getFirstPublished())
+        mainView.set(contributorsList: bookToDisplay.getContributorSerialString())
+        mainView.set(numberOfEditions: bookToDisplay.getNumberOfEditions())
+        mainView.saveButton.setTitle("SAVE", for: .normal)
+        mainView.saveButton.addTarget(self, action: #selector(onSavePress), for: .touchUpInside)
+    }
+    
+    @objc private func onSavePress() {
+        guard let bookDetailsPresenter = self.bookDetailsPresenter else {
+            print("BookDetailsPresenter nil")
+            return
+        }
+        bookDetailsPresenter.handleSaveClick()
+    }
+    
+    func dismissBookDetailsView() {
+        guard let navigationController = navigationController else {
+            print("NavigationController nil in BookDetails")
+            return
+        }
+        navigationController.popViewController(animated: true)
+    }
+    
+    func showSaveErrorAlert(message: String, title: String) {
+        showAlert(title: title, message: message)
+    }
+    
+    func showSaveSuccessAlert(message: String, title: String, then callback: @escaping Callback) {
+        showAlert(title: title, message: message) { _ in
+            callback()
+        }
     }
 }

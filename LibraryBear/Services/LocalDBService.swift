@@ -7,5 +7,62 @@
 //
 
 import Foundation
+import RealmSwift
 
-class LocalDBService {}
+enum LocalDBError: String {
+    case alreadySaved
+    case failedToSave
+}
+
+class LocalDBService {
+    func cache(book: Book, callback: LocalDBSuccessCallback) {
+        guard let realm = getRealm() else {
+            return
+        }
+        
+        let newLocalBook = LocalBook(book: book)
+        
+        guard getBook(withId: book.getISBNSerialString()) == nil else {
+            callback(false, .alreadySaved)
+            return
+        }
+        
+        do {
+            try realm.write {
+                realm.add(newLocalBook, update: .all)
+                callback(true, nil)
+            }
+        } catch {
+            print(error.localizedDescription)
+            callback(false, .failedToSave)
+        }
+    }
+    
+    func getCachedBooks() -> [Book]? {
+        guard let realm = getRealm() else {
+            return nil
+        }
+        
+        return realm.objects(LocalBook.self).map { localBook in
+            return localBook
+        }
+    }
+    
+    private func getRealm() -> Realm? {
+        do {
+             return try Realm()
+        } catch {
+            print("Error attempting to instantiate Realm \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    private func getBook(withId id: String) -> Book? {
+        guard let realm = getRealm() else {
+            return nil
+        }
+        
+        let results = realm.objects(LocalBook.self).filter("id = '\(id)'")
+        return results.first
+    }
+}
