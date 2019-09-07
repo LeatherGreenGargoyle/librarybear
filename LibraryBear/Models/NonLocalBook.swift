@@ -9,6 +9,8 @@
 import Foundation
 
 protocol Book {
+    var authors: [String] { get }
+    
     func getNumberOfEditions() -> String
     func getTitle() -> String
     func getFirstPublished() -> String
@@ -16,6 +18,7 @@ protocol Book {
     func getMediumCoverURL() -> URL?
     func getSmallCoverURL() -> URL?
     func getAuthorSerialString() -> String
+    func getAbbreviatedAuthorSerialString() -> String
     func getISBNSerialString() -> String
     func getContributorSerialString() -> String
     func getPublishersSerialString() -> String
@@ -45,6 +48,14 @@ struct NonLocalBook: Book {
     
     func getAuthorSerialString() -> String {
         return authors.getSerialString()
+    }
+    
+    func getAbbreviatedAuthorSerialString() -> String {
+        if let firstAuthor = authors.first, authors.count > 2 {
+            return "\(firstAuthor), et al"
+        } else {
+            return getAuthorSerialString()
+        }
     }
     
     func getISBNSerialString() -> String {

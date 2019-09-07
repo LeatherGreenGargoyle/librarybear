@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 class SearchViewController: BaseViewController<SearchView> {
-    private let REUSE_ID_BOOK_CELL = "bookTableViewCell"
     
     private var searchPresenter: SearchPresenter?
     private var booksToDisplay: [Book] = []
@@ -18,11 +17,11 @@ class SearchViewController: BaseViewController<SearchView> {
     override func viewDidLoad() {
         super.viewDidLoad()
         mainView.set(delegate: self)
-        mainView.tableView.register(BookTableViewCell.self, forCellReuseIdentifier: REUSE_ID_BOOK_CELL)
-        mainView.tableView.rowHeight = 100
-        mainView.tableView.allowsSelection = true
-        mainView.tableView.delegate = self
-        mainView.tableView.dataSource = self
+        mainView.collectionView.dataSource = self
+        mainView.collectionView.delegate = self
+        mainView.collectionView.register(BookCellView.self, forCellWithReuseIdentifier: BookCellView.identifier)
+        mainView.collectionView.alwaysBounceVertical = true
+        mainView.collectionView.backgroundColor = .white
         
         let newLibaryService = LibraryService()
         searchPresenter = SearchPresenter(
@@ -36,14 +35,14 @@ class SearchViewController: BaseViewController<SearchView> {
         print("Error received by SearchVC: \(error)")
         booksToDisplay.removeAll(keepingCapacity: false)
         mainThread {
-            self.mainView.tableView.reloadData()
+            self.mainView.collectionView.reloadData()
         }
     }
     
     func onQuery(results: [Book]) {
         booksToDisplay = results
         mainThread {
-            self.mainView.tableView.reloadData()
+            self.mainView.collectionView.reloadData()
         }
     }
     
@@ -51,14 +50,14 @@ class SearchViewController: BaseViewController<SearchView> {
         booksToDisplay.append(contentsOf: moreResults)
         print("displaying more results...")
         mainThread {
-            self.mainView.tableView.reloadData()
+            self.mainView.collectionView.reloadData()
         }
     }
     
     func showEmptyList() {
         booksToDisplay.removeAll(keepingCapacity: false)
         mainThread {
-            self.mainView.tableView.reloadData()
+            self.mainView.collectionView.reloadData()
         }
     }
 }
@@ -69,45 +68,78 @@ extension SearchViewController: SearchViewDelegate {
     }
 }
 
-extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+extension SearchViewController: UICollectionViewDataSource {
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        return booksToDisplay.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCellView.identifier,
+                                                            for: indexPath) as? BookCellView else {
+            print("Unable to dequeue BookCellView")
+            return UICollectionViewCell()
+        }
+        
         defer {
-            searchPresenter?.handleWillDisplay(finalBook: indexPath.row == booksToDisplay.count - 1)
+            searchPresenter?.handleWillDisplay(finalBook: indexPath.row >= booksToDisplay.count - 20)
         }
         
-        guard indexPath.row <= booksToDisplay.count else {
-            mainThread {
-                self.mainView.tableView.reloadData()
-            }
-            return UITableViewCell()
-        }
-        guard let cell = mainView.tableView
-            .dequeueReusableCell(withIdentifier: REUSE_ID_BOOK_CELL) as? BookTableViewCell else {
-                return UITableViewCell()
-        }
-        
-        let book = booksToDisplay[indexPath.row]
-        cell.set(title: book.getTitle())
-        cell.set(authors: book.getAuthorSerialString())
+        let book = booksToDisplay[indexPath.item]
+        cell.set(
+            title: book.getTitle(),
+            author: book.getAbbreviatedAuthorSerialString(),
+            publishDate: book.getFirstPublished()
+        )
         if let url = book.getMediumCoverURL() {
             cell.set(coverURL: url)
         }
-        cell.set(publishDate: book.getFirstPublished())
-        
         return cell
     }
+}
+
+extension SearchViewController: UICollectionViewDelegate {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let book = booksToDisplay[indexPath.row]
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard indexPath.row <= booksToDisplay.count else {
+            print("didSelectItem at a row greater than data count")
+            return
+        }
         guard let navigationController = navigationController else {
             print("Missing SearchNavigationController")
             return
         }
+        let book = booksToDisplay[indexPath.row]
         navigationController.pushViewController(BookDetailsViewController(bookToDisplay: book), animated: true)
+
+    }
+}
+
+extension SearchViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.bounds.width * 0.4, height: UIScreen.main.bounds.height * 0.3)
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return booksToDisplay.count
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
     }
 }

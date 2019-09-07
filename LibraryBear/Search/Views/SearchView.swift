@@ -29,9 +29,9 @@ class SearchView: UIView {
         textField.placeholder = "Let's find a book!"
         return textField
     }()
-    let tableView: UITableView = {
-        let tableView = UITableView()
-        return tableView
+    let collectionView: UICollectionView = {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        return collectionView
     }()
     
     // MARK: Members
@@ -39,7 +39,7 @@ class SearchView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubviews([header, searchField, tableView])
+        self.addSubviews([header, searchField, collectionView])
         searchField.addTarget(self, action: #selector(searchInputted), for: .editingChanged)
         
         header.snp.makeConstraints { (make) in
@@ -49,7 +49,7 @@ class SearchView: UIView {
             make.top.equalTo(header.snp.bottom)
             make.leading.trailing.equalToSuperview()
         }
-        tableView.snp.makeConstraints { (make) in
+        collectionView.snp.makeConstraints { (make) in
             make.top.equalTo(searchField.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
         }

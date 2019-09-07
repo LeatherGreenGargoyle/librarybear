@@ -13,6 +13,8 @@ import RealmSwift
 
     @objc private dynamic var id: String!
     
+    var authors: [String] = []
+    
     var smallCoverURLString: String?
     
     var mediumCoverURLString: String?
@@ -41,6 +43,7 @@ import RealmSwift
         self.init()
         
         id = book.getISBNSerialString()
+        authors.append(contentsOf: book.authors)
         title = book.getTitle()
         authorSerialString = book.getAuthorSerialString()
         firstPublished = book.getFirstPublished()
@@ -51,6 +54,14 @@ import RealmSwift
         contributorSerialString = book.getContributorSerialString()
         numberOfEditions = book.getNumberOfEditions()
         publisherSerialString = book.getPublishersSerialString()
+    }
+    
+    func getAbbreviatedAuthorSerialString() -> String {
+        if let firstAuthor = authors.first, authors.count > 2 {
+            return "\(firstAuthor), et al"
+        } else {
+            return getAuthorSerialString()
+        }
     }
     
     func getAuthorSerialString() -> String {

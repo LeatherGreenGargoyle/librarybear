@@ -13,6 +13,7 @@ class SearchPresenter {
     private var currentSearchBufferTimer: Timer?
     private var libraryService: LibraryService?
     private weak var searchView: SearchViewController?
+    private var isCurrentlyFetchingMore = false
     
     convenience init(libraryService: LibraryService, view: SearchViewController) {
         self.init()
@@ -37,9 +38,11 @@ class SearchPresenter {
     }
     
     func handleWillDisplay(finalBook isFinalBook: Bool) {
-        guard isFinalBook else {
+        guard isFinalBook, !isCurrentlyFetchingMore else {
             return
         }
+        
+        isCurrentlyFetchingMore = true
         
         libraryService?.fetchMoreResults(onResult: handleMore, onErrorMessage: handleSearchError)
     }
@@ -53,6 +56,7 @@ class SearchPresenter {
     }
     
     private func handleMore(results: [Book]) {
+        isCurrentlyFetchingMore = false
         searchView?.onQuery(moreResults: results)
     }
 }
