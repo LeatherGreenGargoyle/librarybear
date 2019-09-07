@@ -25,7 +25,7 @@ class BookDetailsPresenter {
             print("LocalDBService nil")
             return
         }
-        guard let book = selectedBook else {
+        guard let book = selectedBook as? NonLocalBook else {
             print("Book nil")
             return
         }

@@ -26,6 +26,7 @@
 		A40CA5D32323601F00A6866A /* NonLocalBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5D22323601F00A6866A /* NonLocalBook.swift */; };
 		A40CA5D52323629A00A6866A /* LocalBook.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5D42323629A00A6866A /* LocalBook.swift */; };
 		A40CA5D7232412C500A6866A /* BookCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5D6232412C500A6866A /* BookCellView.swift */; };
+		A40CA5DB23244A4000A6866A /* WishlistPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40CA5DA23244A4000A6866A /* WishlistPresenter.swift */; };
 		A4C4E2572320C1AF00A403F8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C4E2562320C1AF00A403F8 /* AppDelegate.swift */; };
 		A4C4E25E2320C1B000A403F8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A4C4E25D2320C1B000A403F8 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -49,6 +50,7 @@
 		A40CA5D22323601F00A6866A /* NonLocalBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonLocalBook.swift; sourceTree = "<group>"; };
 		A40CA5D42323629A00A6866A /* LocalBook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalBook.swift; sourceTree = "<group>"; };
 		A40CA5D6232412C500A6866A /* BookCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCellView.swift; sourceTree = "<group>"; };
+		A40CA5DA23244A4000A6866A /* WishlistPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishlistPresenter.swift; sourceTree = "<group>"; };
 		A4C4E2532320C1AF00A403F8 /* LibraryBear.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibraryBear.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4C4E2562320C1AF00A403F8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A4C4E25D2320C1B000A403F8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 			children = (
 				A40CA5B62320CA3000A6866A /* WishlistView.swift */,
 				A40CA5B82320CA6E00A6866A /* WishlistViewController.swift */,
+				A40CA5DA23244A4000A6866A /* WishlistPresenter.swift */,
 			);
 			path = Wishlist;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				A40CA5B42320C9B900A6866A /* SearchViewController.swift in Sources */,
 				A40CA5B22320C93B00A6866A /* Extensions.swift in Sources */,
 				A40CA5BC2320D69800A6866A /* LibraryService.swift in Sources */,
+				A40CA5DB23244A4000A6866A /* WishlistPresenter.swift in Sources */,
 				A40CA5A72320C58F00A6866A /* TabBarController.swift in Sources */,
 				A40CA5B92320CA6E00A6866A /* WishlistViewController.swift in Sources */,
 				A40CA5CC232206C000A6866A /* BookDetailsPresenter.swift in Sources */,

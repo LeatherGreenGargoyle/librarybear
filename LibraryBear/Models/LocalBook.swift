@@ -13,43 +13,43 @@ import RealmSwift
 
     @objc private dynamic var id: String!
     
-    var authors: [String] = []
+    var authors: List<String> = List<String>()
     
-    var smallCoverURLString: String?
+    @objc dynamic var smallCoverURLString: String?
     
-    var mediumCoverURLString: String?
+    @objc dynamic var mediumCoverURLString: String?
     
-    var largeCoverURLString: String?
+    @objc dynamic var largeCoverURLString: String?
     
-    var title: String = ""
+    @objc dynamic var title: String = ""
 
-    var authorSerialString: String = ""
+    @objc dynamic var authorSerialString: String = ""
     
-    var firstPublished: String = ""
+    @objc dynamic var firstPublished: String = ""
     
-    var isbnSerialString: String = ""
+    @objc dynamic var isbnSerialString: String = ""
     
-    var contributorSerialString: String = ""
+    @objc dynamic var contributorSerialString: String = ""
     
-    var numberOfEditions: String = ""
+    @objc dynamic var numberOfEditions: String = ""
     
-    var publisherSerialString: String = ""
+    @objc dynamic var publisherSerialString: String = ""
     
     override static func primaryKey() -> String? {
         return "id"
     }
     
-    convenience init(book: Book) {
+    convenience init(book: NonLocalBook) {
         self.init()
         
         id = book.getISBNSerialString()
-        authors.append(contentsOf: book.authors)
+        authors.append(objectsIn: book.authors)
         title = book.getTitle()
         authorSerialString = book.getAuthorSerialString()
         firstPublished = book.getFirstPublished()
-        largeCoverURLString = book.getLargeCoverURL()?.absoluteString
-        mediumCoverURLString = book.getMediumCoverURL()?.absoluteString
-        smallCoverURLString = book.getSmallCoverURL()?.absoluteString
+        largeCoverURLString = book.largeCoverURL ?? ""
+        mediumCoverURLString = book.mediumCoverURL ?? ""
+        smallCoverURLString = book.smallCoverURL ?? ""
         isbnSerialString = book.getISBNSerialString()
         contributorSerialString = book.getContributorSerialString()
         numberOfEditions = book.getNumberOfEditions()

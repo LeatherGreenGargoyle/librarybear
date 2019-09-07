@@ -15,7 +15,7 @@ enum LocalDBError: String {
 }
 
 class LocalDBService {
-    func cache(book: Book, callback: LocalDBSuccessCallback) {
+    func cache(book: NonLocalBook, callback: LocalDBSuccessCallback) {
         guard let realm = getRealm() else {
             return
         }

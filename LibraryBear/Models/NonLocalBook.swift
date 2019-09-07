@@ -9,8 +9,6 @@
 import Foundation
 
 protocol Book {
-    var authors: [String] { get }
-    
     func getNumberOfEditions() -> String
     func getTitle() -> String
     func getFirstPublished() -> String
@@ -32,11 +30,11 @@ struct NonLocalBook: Book {
     
     let firstPublished: String
     
-    let largeCoverURL: URL?
+    let largeCoverURL: String?
     
-    let mediumCoverURL: URL?
+    let mediumCoverURL: String?
     
-    let smallCoverURL: URL?
+    let smallCoverURL: String?
     
     let isbnNumbers: [String]
     
@@ -71,15 +69,24 @@ struct NonLocalBook: Book {
     }
     
     func getLargeCoverURL() -> URL? {
-        return largeCoverURL
+        guard let largeCoverURL = self.largeCoverURL else {
+            return nil
+        }
+        return URL(string: largeCoverURL)
     }
     
     func getMediumCoverURL() -> URL? {
-        return mediumCoverURL
+        guard let mediumCoverURL = self.mediumCoverURL else {
+            return nil
+        }
+        return URL(string: mediumCoverURL)
     }
     
     func getSmallCoverURL() -> URL? {
-        return smallCoverURL
+        guard let smallCoverURL = self.smallCoverURL else {
+            return nil
+        }
+        return URL(string: smallCoverURL)
     }
     
     func getNumberOfEditions() -> String {

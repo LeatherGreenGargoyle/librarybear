@@ -95,14 +95,14 @@ class LibraryService {
         return searchInput.replacingOccurrences(of: " ", with: "+") + "&page=\(currentPagination)"
     }
     
-    private func getUrlFor(coverEditionKey: String, size: CoverImageSize) -> URL? {
+    private func getUrlFor(coverEditionKey: String, size: CoverImageSize) -> String? {
         switch size {
         case .small:
-            return URL(string: "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-S.jpg")
+            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-S.jpg"
         case .medium:
-            return URL(string: "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-M.jpg")
+            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-M.jpg"
         case .large:
-            return URL(string: "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-L.jpg")
+            return "https://covers.openlibrary.org/b/olid/\(coverEditionKey)-L.jpg"
         }
     }
     
