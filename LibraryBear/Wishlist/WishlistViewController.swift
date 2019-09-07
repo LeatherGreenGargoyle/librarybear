@@ -31,6 +31,15 @@ class WishlistViewController: BaseViewController<WishListView>, WishListViewDele
         presenter = WishlistPresenter(localDBService: newLocalDBService, view: self)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let presenter = presenter else {
+            print("WishlistPresenter nil in viewWillAppear")
+            return
+        }
+        presenter.onViewWillAppear()
+    }
+    
     func showEmptyList() {
         // TODO
     }
@@ -82,7 +91,7 @@ extension WishlistViewController: UICollectionViewDelegate {
             return
         }
         let book = booksToDisplay[indexPath.row]
-        navigationController.pushViewController(BookDetailsViewController(bookToDisplay: book), animated: true)
+        navigationController.pushViewController(BookDetailsViewController(bookToDisplay: book, isLocal: true), animated: true)
         
     }
 }

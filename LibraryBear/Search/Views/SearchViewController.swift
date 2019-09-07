@@ -112,7 +112,7 @@ extension SearchViewController: UICollectionViewDelegate {
             return
         }
         let book = booksToDisplay[indexPath.row]
-        navigationController.pushViewController(BookDetailsViewController(bookToDisplay: book), animated: true)
+        navigationController.pushViewController(BookDetailsViewController(bookToDisplay: book, isLocal: false), animated: true)
 
     }
 }

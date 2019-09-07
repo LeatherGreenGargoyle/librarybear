@@ -80,7 +80,7 @@ class BookDetailsView: UIScrollView {
         label.textAlignment = .center
         return label
     }()
-    let saveButton: UIButton = {
+    let actionButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .gray
         return button
@@ -94,7 +94,7 @@ class BookDetailsView: UIScrollView {
                           isbnLabel, isbnList, contributorsLabel, contributorsList,
                           numberOfEditions,
                           publishersLabel, publishersList,
-                          saveButton])
+                          actionButton])
         
         coverImage.snp.makeConstraints { (make) in
             make.leading.top.trailing.equalToSuperview()
@@ -156,9 +156,9 @@ class BookDetailsView: UIScrollView {
             make.top.equalTo(publishersLabel.snp.bottom)
             make.leading.trailing.equalToSuperview().offset(8)
             make.width.equalTo(UIScreen.main.bounds.width)
-            make.bottom.equalTo(saveButton.snp.top)
+            make.bottom.equalTo(actionButton.snp.top)
         }
-        saveButton.snp.makeConstraints { (make) in
+        actionButton.snp.makeConstraints { (make) in
             make.top.equalTo(publishersList.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
             make.height.equalTo(50)

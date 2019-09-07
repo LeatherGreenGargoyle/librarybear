@@ -12,6 +12,7 @@ import RealmSwift
 enum LocalDBError: String {
     case alreadySaved
     case failedToSave
+    case failedToDelete
 }
 
 class LocalDBService {
@@ -45,6 +46,22 @@ class LocalDBService {
         
         return realm.objects(LocalBook.self).map { localBook in
             return localBook
+        }
+    }
+    
+    func removeCached(book: LocalBook, callback: LocalDBSuccessCallback) {
+        guard let realm = getRealm() else {
+            return
+        }
+        
+        do {
+            try realm.write() {
+                realm.delete(book)
+                callback(true, nil)
+            }
+        } catch {
+            print("Error removing cached book: \(error.localizedDescription)")
+            callback(false, .failedToDelete)
         }
     }
     

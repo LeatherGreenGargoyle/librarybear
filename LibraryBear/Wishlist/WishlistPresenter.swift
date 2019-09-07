@@ -28,6 +28,19 @@ class WishlistPresenter {
         onAttachView()
     }
     
+    func onViewWillAppear() {
+        guard let view = wishlistView else {
+            print("WishListViewDelegate nil onAttachView")
+            return
+        }
+        guard let books = getAllCachedBooks() else {
+            view.showEmptyList()
+            return
+        }
+        
+        view.show(books: books)
+    }
+    
     private func onAttachView() {
         guard let view = wishlistView else {
             print("WishListViewDelegate nil onAttachView")
