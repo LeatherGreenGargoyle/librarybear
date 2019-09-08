@@ -21,7 +21,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tabBar.tintColor = .brown
+        self.tabBar.tintColor = .lbBrown
         
         let searchNavigationController = UINavigationController()
         searchNavigationController.addChild(searchViewController)

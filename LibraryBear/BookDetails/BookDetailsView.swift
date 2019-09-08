@@ -22,24 +22,38 @@ class BookDetailsView: UIScrollView {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
+        label.font = .bold18
         return label
+    }()
+    private let subtitleContainer: UIView = {
+        let view = UIView()
+        return view
+    }()
+    private let titleDivider: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray
+        return view
     }()
     private let author: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
+        label.font = .regular14
         return label
     }()
     private let publishingDate: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.font = .regular14
         return label
     }()
     private let isbnLabel: UILabel = {
         let label = UILabel()
         label.text = "ISBN numbers:"
         label.textAlignment = .center
+        label.font = .regular10
+        label.textColor = .lbGreen
         return label
     }()
     private let isbnList: UILabel = {
@@ -47,12 +61,19 @@ class BookDetailsView: UIScrollView {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
+        label.font = .regular14
         return label
+    }()
+    private let isbnMarginBottom: UIView = {
+        let view = UIView()
+        return view
     }()
     private let contributorsLabel: UILabel = {
         let label = UILabel()
         label.text = "Contributors:"
         label.textAlignment = .center
+        label.font = .regular10
+        label.textColor = .lbGreen
         return label
     }()
     private let contributorsList: UILabel = {
@@ -60,108 +81,153 @@ class BookDetailsView: UIScrollView {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
+        label.font = .regular14
         return label
+    }()
+    private let contributorMarginBottom: UIView = {
+        let view = UIView()
+        return view
     }()
     private let numberOfEditions: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
+        label.font = .regular14
         return label
     }()
     private let publishersLabel: UILabel = {
         let label = UILabel()
         label.text = "Publishers:"
         label.textAlignment = .center
+        label.font = .regular10
+        label.textColor = .lbGreen
         return label
     }()
     private let publishersList: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.sizeToFit()
         label.textAlignment = .center
+        label.font = .regular14
         return label
+    }()
+    private let publishersMarginBottom: UIView = {
+        let view = UIView()
+        return view
     }()
     let actionButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .gray
+        button.backgroundColor = .brown
         return button
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubviews([coverImage,
-                          title, author,
-                          publishingDate,
-                          isbnLabel, isbnList, contributorsLabel, contributorsList,
-                          numberOfEditions,
-                          publishersLabel, publishersList,
+                          titleDivider,
+                          title,
+                          subtitleContainer,
+                          isbnLabel, isbnList, contributorsLabel, contributorsList, isbnMarginBottom,
+                          contributorMarginBottom,
+                          publishersLabel, publishersList, publishersMarginBottom,
                           actionButton])
+        subtitleContainer.addSubviews([author, publishingDate, numberOfEditions])
         
         coverImage.snp.makeConstraints { (make) in
-            make.leading.top.trailing.equalToSuperview()
+            make.centerX.top.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.8)
             make.height.equalTo(300)
+            make.bottom.equalTo(titleDivider.snp.top)
+        }
+        titleDivider.snp.makeConstraints { (make) in
+            make.top.equalTo(coverImage.snp.bottom)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalTo(1)
             make.bottom.equalTo(title.snp.top)
         }
         title.snp.makeConstraints { (make) in
-            make.leading.trailing.equalToSuperview().offset(8)
-            make.width.equalTo(UIScreen.main.bounds.width)
-            make.top.equalTo(coverImage.snp.bottom)
-            make.bottom.equalTo(author.snp.top)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.top.equalTo(titleDivider.snp.bottom)
+            make.bottom.equalTo(subtitleContainer.snp.top)
         }
-        author.snp.makeConstraints { (make) in
+        subtitleContainer.snp.makeConstraints { (make) in
             make.top.equalTo(title.snp.bottom)
-            make.leading.trailing.equalToSuperview().offset(8)
-            make.width.equalTo(UIScreen.main.bounds.width)
-            make.bottom.equalTo(publishingDate.snp.top)
-        }
-        publishingDate.snp.makeConstraints { (make) in
-            make.top.equalTo(author.snp.bottom)
-            make.leading.trailing.equalToSuperview().offset(8)
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.height.equalTo(65)
             make.bottom.equalTo(contributorsLabel.snp.top)
         }
+            author.snp.makeConstraints { (make) in
+                make.top.equalToSuperview()
+                make.centerX.equalToSuperview()
+                make.bottom.equalTo(publishingDate.snp.top)
+            }
+            publishingDate.snp.makeConstraints { (make) in
+                make.top.equalTo(author.snp.bottom)
+                make.centerX.equalToSuperview()
+                make.bottom.equalTo(numberOfEditions.snp.top)
+            }
+            numberOfEditions.snp.makeConstraints { (make) in
+                make.top.equalTo(publishingDate.snp.bottom)
+                make.centerX.equalToSuperview()
+            }
+        
         contributorsLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(publishingDate.snp.bottom)
-            make.leading.trailing.equalToSuperview().offset(8)
+            make.top.equalTo(subtitleContainer.snp.bottom)
+            make.centerX.equalToSuperview()
             make.bottom.equalTo(contributorsList.snp.top)
         }
         contributorsList.snp.makeConstraints { (make) in
             make.top.equalTo(contributorsLabel.snp.bottom)
-            make.leading.trailing.equalToSuperview().offset(8)
-            make.width.equalTo(UIScreen.main.bounds.width)
-            make.bottom.equalTo(numberOfEditions.snp.top)
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(contributorMarginBottom.snp.top)
         }
-        numberOfEditions.snp.makeConstraints { (make) in
+        contributorMarginBottom.snp.makeConstraints { (make) in
             make.top.equalTo(contributorsList.snp.bottom)
-            make.leading.trailing.equalToSuperview().offset(8)
             make.bottom.equalTo(isbnLabel.snp.top)
+            make.height.equalTo(20)
+            make.leading.trailing.equalToSuperview()
         }
         isbnLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(numberOfEditions.snp.bottom)
-            make.leading.equalToSuperview()
-            make.leading.trailing.equalToSuperview().offset(8)
-            make.width.equalTo(UIScreen.main.bounds.width)
+            make.top.equalTo(contributorMarginBottom.snp.bottom)
+            make.centerX.equalToSuperview()
             make.bottom.equalTo(isbnList.snp.top)
         }
         isbnList.snp.makeConstraints { (make) in
             make.top.equalTo(isbnLabel.snp.bottom)
-            make.leading.trailing.equalToSuperview().offset(8)
-            make.width.equalTo(UIScreen.main.bounds.width)
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(isbnMarginBottom.snp.top)
+        }
+        isbnMarginBottom.snp.makeConstraints { (make) in
+            make.top.equalTo(isbnList.snp.bottom)
             make.bottom.equalTo(publishersLabel.snp.top)
+            make.height.equalTo(20)
+            make.leading.trailing.equalToSuperview()
         }
         publishersLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(isbnList.snp.bottom)
-            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(isbnMarginBottom.snp.bottom)
+            make.centerX.equalToSuperview()
             make.bottom.equalTo(publishersList.snp.top)
         }
         publishersList.snp.makeConstraints { (make) in
             make.top.equalTo(publishersLabel.snp.bottom)
-            make.leading.trailing.equalToSuperview().offset(8)
-            make.width.equalTo(UIScreen.main.bounds.width)
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(publishersMarginBottom.snp.top)
+        }
+        publishersMarginBottom.snp.makeConstraints { (make) in
+            make.top.equalTo(publishersList.snp.bottom)
             make.bottom.equalTo(actionButton.snp.top)
+            make.height.equalTo(20)
+            make.leading.trailing.equalToSuperview()
         }
         actionButton.snp.makeConstraints { (make) in
-            make.top.equalTo(publishersList.snp.bottom)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(publishersMarginBottom.snp.bottom)
+            make.centerX.bottom.equalToSuperview()
+            make.width.equalToSuperview()
             make.height.equalTo(50)
         }
     }

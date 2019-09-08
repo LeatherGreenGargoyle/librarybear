@@ -32,8 +32,8 @@ class SearchViewController: BaseViewController<SearchView>, SearchViewDelegate {
         )
         navigationItem.title = "Library Bear"
         navigationController?.navigationBar.titleTextAttributes =
-            [.foregroundColor : UIColor.brown]
-        navigationController?.navigationBar.tintColor = .brown
+            [.foregroundColor : UIColor.lbBrown]
+        navigationController?.navigationBar.tintColor = .lbBrown
         
         let newLibaryService = LibraryService()
         searchPresenter = SearchPresenter(
@@ -43,7 +43,9 @@ class SearchViewController: BaseViewController<SearchView>, SearchViewDelegate {
     }
     
     func showSearchErrorAlert(message: String, title: String) {
-        showAlert(title: title, message: message)
+        mainThread {
+            self.showAlert(title: title, message: message)
+        }
     }
     
     func showEmptyList() {

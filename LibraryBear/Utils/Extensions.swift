@@ -24,11 +24,14 @@ extension Array where Element == String {
 }
 
 extension UIColor {
-    class var brown: UIColor {
+    class var lbBrown: UIColor {
         return UIColor(red: 156.0 / 255.0, green: 103.0 / 255.0, blue: 11.0 / 255.0, alpha: 1.0)
     }
-    class var gray: UIColor {
+    class var lbGray: UIColor {
         return UIColor(red: 237.0 / 255.0, green: 237.0 / 255.0, blue: 237.0 / 255.0, alpha: 1.0)
+    }
+    class var lbGreen: UIColor {
+        return UIColor(red: 69.0 / 255.0, green: 99.0 / 255.0, blue: 57.0 / 255.0, alpha: 1.0)
     }
 }
 
@@ -39,6 +42,10 @@ extension UIFont {
     
     class var regular14:  UIFont {
         return UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.regular)
+    }
+    
+    class var bold18:  UIFont {
+        return UIFont.systemFont(ofSize: 18.0, weight: UIFont.Weight.bold)
     }
 }
 

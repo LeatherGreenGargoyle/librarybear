@@ -19,7 +19,7 @@ class BookCellView: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.sd_imageTransition = .fade
-        imageView.backgroundColor = .gray
+        imageView.backgroundColor = .lbGray
         return imageView
     }()
     private let bookTitle: UILabel = {
