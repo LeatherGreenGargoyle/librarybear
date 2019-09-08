@@ -30,6 +30,10 @@ class SearchViewController: BaseViewController<SearchView>, SearchViewDelegate {
         mainView.searchField.addTarget(
             self, action: #selector(searchInputted), for: .editingChanged
         )
+        navigationItem.title = "Library Bear"
+        navigationController?.navigationBar.titleTextAttributes =
+            [.foregroundColor : UIColor.brown]
+        navigationController?.navigationBar.tintColor = .brown
         
         let newLibaryService = LibraryService()
         searchPresenter = SearchPresenter(
@@ -136,7 +140,7 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width * 0.45, height: UIScreen.main.bounds.height * 0.4)
+        return CGSize(width: collectionView.bounds.width * 0.45, height: UIScreen.main.bounds.height * 0.35)
     }
     
     func collectionView(_ collectionView: UICollectionView,

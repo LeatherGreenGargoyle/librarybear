@@ -9,15 +9,15 @@
 import Foundation
 import SnapKit
 import UIKit
-import VegaScrollFlowLayout
 
 class SearchView: UIView {
     // MARK: Subviews
-    private let header: UILabel = {
-        let label = UILabel()
-        label.text = "I am the SearchView"
-        label.font = .regular14
-        return label
+    let searchImage: UIImageView = {
+        let imageView = UIImageView()
+        let image = UIImage(named: "icon_search")
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = image
+        return imageView
     }()
     let searchField: UITextField = {
         let textField = UITextField()
@@ -27,24 +27,24 @@ class SearchView: UIView {
         return textField
     }()
     let collectionView: UICollectionView = {
-        let layout = VegaScrollFlowLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         return collectionView
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubviews([header, searchField, collectionView])
-        
-        header.snp.makeConstraints { (make) in
-            make.top.leading.trailing.equalToSuperview()
+        self.addSubviews([searchImage, searchField, collectionView])
+        searchImage.snp.makeConstraints { (make) in
+            make.top.leading.equalToSuperview().offset(8)
+            make.height.width.equalTo(20)
+            make.centerY.equalTo(searchField)
         }
         searchField.snp.makeConstraints { (make) in
-            make.top.equalTo(header.snp.bottom)
-            make.leading.trailing.equalToSuperview()
+            make.top.trailing.equalToSuperview().offset(8)
+            make.leading.equalTo(searchImage.snp.trailing).offset(4)
         }
         collectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(searchField.snp.bottom)
+            make.top.equalTo(searchField.snp.bottom).offset(16)
             make.leading.trailing.bottom.equalToSuperview()
         }
     }

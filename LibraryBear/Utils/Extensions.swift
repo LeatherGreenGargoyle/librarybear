@@ -24,6 +24,9 @@ extension Array where Element == String {
 }
 
 extension UIColor {
+    class var brown: UIColor {
+        return UIColor(red: 156.0 / 255.0, green: 103.0 / 255.0, blue: 11.0 / 255.0, alpha: 1.0)
+    }
     class var gray: UIColor {
         return UIColor(red: 237.0 / 255.0, green: 237.0 / 255.0, blue: 237.0 / 255.0, alpha: 1.0)
     }

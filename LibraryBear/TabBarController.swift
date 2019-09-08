@@ -21,12 +21,22 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tabBar.tintColor = .brown
+        
         let searchNavigationController = UINavigationController()
         searchNavigationController.addChild(searchViewController)
-        searchNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: TabIndex.search.rawValue)
+        let searchItem = UITabBarItem(title: nil, image: UIImage(named: "icon_search"), tag: 0)
+        searchItem.imageInsets = UIEdgeInsets(top: 7, left: 0, bottom: -7, right: 0)
+        searchNavigationController.tabBarItem = searchItem
+
         let wishListNavigationController = UINavigationController()
         wishListNavigationController.addChild(wishListViewController)
-        wishListNavigationController.tabBarItem = UITabBarItem(tabBarSystemItem: .bookmarks, tag: TabIndex.search.rawValue)
+        let wishListItem = UITabBarItem(title: nil, image: UIImage(named: "icon_book"), tag: 0)
+        wishListItem.imageInsets = UIEdgeInsets(top: 7, left: 0, bottom: -7, right: 0)
+        wishListNavigationController.tabBarItem = wishListItem
+        
+        searchNavigationController.navigationBar.topItem?.backBarButtonItem =
+            UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         
         viewControllers = [searchNavigationController, wishListNavigationController]
     }

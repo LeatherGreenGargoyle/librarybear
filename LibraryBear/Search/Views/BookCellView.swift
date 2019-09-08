@@ -17,7 +17,9 @@ class BookCellView: UICollectionViewCell {
     
     private let bookCover: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
+        imageView.sd_imageTransition = .fade
+        imageView.backgroundColor = .gray
         return imageView
     }()
     private let bookTitle: UILabel = {
@@ -42,31 +44,34 @@ class BookCellView: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .gray
-        
         addSubviews([bookCover, bookTitle, bookAuthor, bookPublishDate])
         
         bookCover.snp.makeConstraints { (make) in
-            make.top.leading.equalToSuperview().offset(6)
-            make.trailing.equalToSuperview().inset(4)
-            make.height.equalToSuperview().multipliedBy(0.7)
+            make.top.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalToSuperview().multipliedBy(0.76)
         }
         bookTitle.snp.makeConstraints { (make) in
             make.top.equalTo(bookCover.snp.bottom)
             make.leading.trailing.equalToSuperview().offset(4)
-            make.height.equalToSuperview().multipliedBy(0.1)
+            make.height.equalToSuperview().multipliedBy(0.08)
         }
         bookAuthor.snp.makeConstraints { (make) in
             make.top.equalTo(bookTitle.snp.bottom)
             make.leading.trailing.equalToSuperview().offset(4)
-            make.height.equalToSuperview().multipliedBy(0.1)
+            make.height.equalToSuperview().multipliedBy(0.08)
         }
         bookPublishDate.snp.makeConstraints { (make) in
             make.top.equalTo(bookAuthor.snp.bottom)
             make.leading.trailing.equalToSuperview().offset(4)
-            make.height.equalToSuperview().multipliedBy(0.1)
-            make.bottom.equalToSuperview().inset(4)
+            make.height.equalToSuperview().multipliedBy(0.08)
+            make.bottom.equalToSuperview()
         }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        bookCover.setRoundCorners([.topLeft, .topRight], radius: 12)
     }
     
     func set(title: String, author: String, publishDate: String) {
@@ -76,8 +81,15 @@ class BookCellView: UICollectionViewCell {
     }
     
     func set(coverURL: URL) {
-        // TODO: add placeholder
-        bookCover.sd_setImage(with: coverURL, completed: nil)
+        bookCover.sd_setImage(with: coverURL) { (image, _, _, _) in
+            guard let image = image, image.size.width > 1 else {
+                self.bookCover.contentMode = .center
+                if let errorImage = UIImage(named: "icon_no_image") {
+                    self.bookCover.image = errorImage
+                }
+                return
+            }
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

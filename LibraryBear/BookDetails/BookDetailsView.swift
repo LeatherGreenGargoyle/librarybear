@@ -14,6 +14,7 @@ class BookDetailsView: UIScrollView {
     private let coverImage: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
+        imageView.sd_imageTransition = .fade
         return imageView
     }()
     private let title: UILabel = {
@@ -170,7 +171,15 @@ class BookDetailsView: UIScrollView {
     }
     
     func setCoverImage(url: URL) {
-        coverImage.sd_setImage(with: url, placeholderImage: nil)
+        coverImage.sd_setImage(with: url) { (image, _, _, _) in
+            guard let image = image, image.size.width > 1 else {
+                self.coverImage.contentMode = .center
+                if let errorImage = UIImage(named: "icon_no_image") {
+                    self.coverImage.image = errorImage
+                }
+                return
+            }
+        }
     }
     func set(title: String) {
         self.title.text = title
