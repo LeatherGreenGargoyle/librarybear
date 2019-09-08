@@ -113,6 +113,9 @@ extension SearchViewController: UICollectionViewDataSource {
         if let url = book.getMediumCoverURL() {
             cell.set(coverURL: url)
         }
+        
+        cell.setRoundCorners([.topLeft, .topRight, .bottomLeft, .bottomRight], radius: 12)
+        
         return cell
     }
 }
@@ -133,24 +136,24 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.width * 0.4, height: UIScreen.main.bounds.height * 0.3)
+        return CGSize(width: collectionView.bounds.width * 0.45, height: UIScreen.main.bounds.height * 0.4)
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 20
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 20
     }
 }

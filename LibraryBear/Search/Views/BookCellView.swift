@@ -22,40 +22,50 @@ class BookCellView: UICollectionViewCell {
     }()
     private let bookTitle: UILabel = {
         let label = UILabel()
+        label.font = .regular14
+        label.textAlignment = .center
         return label
     }()
     private let bookAuthor: UILabel = {
         let label = UILabel()
+        label.font = .regular10
+        label.textAlignment = .center
         return label
     }()
     private let bookPublishDate: UILabel = {
         let label = UILabel()
+        label.font = .regular10
+        label.textAlignment = .center
         return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        self.backgroundColor = .gray
+        
         addSubviews([bookCover, bookTitle, bookAuthor, bookPublishDate])
         
         bookCover.snp.makeConstraints { (make) in
-            make.top.leading.trailing.equalToSuperview()
+            make.top.leading.equalToSuperview().offset(6)
+            make.trailing.equalToSuperview().inset(4)
             make.height.equalToSuperview().multipliedBy(0.7)
         }
         bookTitle.snp.makeConstraints { (make) in
             make.top.equalTo(bookCover.snp.bottom)
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview().offset(4)
             make.height.equalToSuperview().multipliedBy(0.1)
         }
         bookAuthor.snp.makeConstraints { (make) in
             make.top.equalTo(bookTitle.snp.bottom)
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview().offset(4)
             make.height.equalToSuperview().multipliedBy(0.1)
         }
         bookPublishDate.snp.makeConstraints { (make) in
             make.top.equalTo(bookAuthor.snp.bottom)
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview().offset(4)
             make.height.equalToSuperview().multipliedBy(0.1)
+            make.bottom.equalToSuperview().inset(4)
         }
     }
     

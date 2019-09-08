@@ -9,6 +9,7 @@
 import Foundation
 import SnapKit
 import UIKit
+import VegaScrollFlowLayout
 
 class SearchView: UIView {
     // MARK: Subviews
@@ -26,7 +27,8 @@ class SearchView: UIView {
         return textField
     }()
     let collectionView: UICollectionView = {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let layout = VegaScrollFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         return collectionView
     }()
     

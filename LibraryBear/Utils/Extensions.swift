@@ -23,7 +23,17 @@ extension Array where Element == String {
     }
 }
 
+extension UIColor {
+    class var gray: UIColor {
+        return UIColor(red: 237.0 / 255.0, green: 237.0 / 255.0, blue: 237.0 / 255.0, alpha: 1.0)
+    }
+}
+
 extension UIFont {
+    class var regular10:  UIFont {
+        return UIFont.systemFont(ofSize: 10.0, weight: UIFont.Weight.regular)
+    }
+    
     class var regular14:  UIFont {
         return UIFont.systemFont(ofSize: 14.0, weight: UIFont.Weight.regular)
     }
@@ -34,6 +44,15 @@ extension UIView {
         for view in views {
             self.addSubview(view)
         }
+    }
+    
+    func setRoundCorners(_ corners: UIRectCorner, radius: CGFloat) {
+        let path = UIBezierPath(roundedRect: self.bounds,
+                                byRoundingCorners: corners,
+                                cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        self.layer.mask = mask
     }
 }
 

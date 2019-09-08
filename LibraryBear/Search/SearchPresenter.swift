@@ -15,6 +15,7 @@ class SearchPresenter {
     private weak var view: SearchViewDelegate?
     private var isCurrentlyFetchingMore = false
     private var booksToDisplay: [Book] = []
+    private var lastSearchInput = ""
     
     convenience init(libraryService: LibraryService, view: SearchViewDelegate) {
         self.init()
@@ -36,6 +37,7 @@ class SearchPresenter {
     }
     
     func handleSearch(input: String) {
+        lastSearchInput = input
         guard let view = view else {
             print("ViewDelegate nil in handleSearchError")
             return
@@ -93,7 +95,11 @@ class SearchPresenter {
             print("ViewDelegate nil in handleSearchError")
             return
         }
-        booksToDisplay = results
+        if lastSearchInput.count > 0 {
+            booksToDisplay = results
+        } else {
+            booksToDisplay.removeAll()
+        }
         view.refreshTable()
     }
     
