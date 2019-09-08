@@ -11,7 +11,6 @@ import UIKit
 
 protocol SearchViewDelegate: class {
     func refreshTable()
-    func showEmptyList()
     func showSearchErrorAlert(message: String, title: String)
     func showDetailsViewFor(book: Book)
 }
@@ -25,6 +24,10 @@ class SearchViewController: BaseViewController<SearchView>, SearchViewDelegate {
         mainView.collectionView.dataSource = self
         mainView.collectionView.delegate = self
         mainView.collectionView.register(BookCellView.self, forCellWithReuseIdentifier: BookCellView.identifier)
+        mainView.collectionView.register(EmptyTableView.self,
+                                         forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                         withReuseIdentifier: EmptyTableView.identifier)
+
         mainView.collectionView.alwaysBounceVertical = true
         mainView.collectionView.backgroundColor = .white
         mainView.searchField.addTarget(
@@ -47,11 +50,7 @@ class SearchViewController: BaseViewController<SearchView>, SearchViewDelegate {
             self.showAlert(title: title, message: message)
         }
     }
-    
-    func showEmptyList() {
-        // TODO
-    }
-    
+
     func refreshTable() {
         mainThread {
             self.mainView.collectionView.reloadData()
@@ -135,6 +134,24 @@ extension SearchViewController: UICollectionViewDelegate {
         }
         searchPresenter.handleBookClickAt(row: indexPath.row)
     }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: EmptyTableView.identifier, for: indexPath) as? EmptyTableView else {
+                return UICollectionReusableView()
+            }
+            
+            headerView.setMainText("Try performing a search!")
+            headerView.setSubText("Your results will appear here.")
+            return headerView
+        default:
+            return UICollectionReusableView()
+        }
+    }
 }
 
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
@@ -161,5 +178,18 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 20
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        guard let presenter = searchPresenter else {
+            print("SearchPresenter nil in ReferenceSizeForHeaderInSection")
+            return CGSize.zero
+        }
+        
+        if presenter.getBookCount() > 0 {
+            return CGSize.zero
+        } else {
+            return CGSize(width: collectionView.frame.width, height: 180.0)
+        }
     }
 }

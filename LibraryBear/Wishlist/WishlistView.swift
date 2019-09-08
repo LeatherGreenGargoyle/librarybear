@@ -12,12 +12,6 @@ import UIKit
 
 class WishListView: UIView {
     // MARK: Subviews
-    private let header: UILabel = {
-        let label = UILabel()
-        label.text = "I am the WishlistView"
-        label.font = .regular14
-        return label
-    }()
     let collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         return collectionView
@@ -25,13 +19,9 @@ class WishListView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubviews([header, collectionView])
-        header.snp.makeConstraints { (make) in
-            make.top.leading.trailing.equalToSuperview()
-        }
+        self.addSubviews([collectionView])
         collectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(header.snp.bottom)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
     }
     

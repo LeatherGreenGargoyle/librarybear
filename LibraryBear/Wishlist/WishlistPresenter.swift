@@ -19,6 +19,7 @@ class WishlistPresenter {
     
     private var localDBService: LocalDBService?
     private weak var wishlistView: WishListViewDelegate?
+    private var booksToDisplay: [Book] = []
     
     convenience init(localDBService: LocalDBService, view: WishListViewDelegate) {
         self.init()
@@ -33,12 +34,37 @@ class WishlistPresenter {
             print("WishListViewDelegate nil onAttachView")
             return
         }
-        guard let books = getAllCachedBooks() else {
-            view.showEmptyList()
-            return
+        
+        if let cachedBooks = getAllCachedBooks() {
+            booksToDisplay = cachedBooks
         }
         
-        view.show(books: books)
+        view.refreshTable()
+    }
+    
+    func getBookCount() -> Int {
+        return booksToDisplay.count
+    }
+    
+    func getBookAt(index: Int) -> Book? {
+        guard index < booksToDisplay.count else {
+            return nil
+        }
+        
+        return booksToDisplay[index]
+    }
+    
+    func handleBookClickAt(row: Int) {
+        guard let view = wishlistView else {
+            print("ViewDelegate nil in handleBookClick")
+            return
+        }
+        guard row <= booksToDisplay.count else {
+            print("didSelectItem at a row greater than data count")
+            return
+        }
+        let book = booksToDisplay[row]
+        view.showDetailsViewFor(book: book)
     }
     
     private func onAttachView() {
@@ -46,12 +72,7 @@ class WishlistPresenter {
             print("WishListViewDelegate nil onAttachView")
             return
         }
-        guard let books = getAllCachedBooks() else {
-            view.showEmptyList()
-            return
-        }
-        
-        view.show(books: books)
+        view.refreshTable()
     }
     
     private func getAllCachedBooks() -> [Book]? {

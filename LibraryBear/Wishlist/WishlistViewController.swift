@@ -10,14 +10,13 @@ import Foundation
 import UIKit
 
 protocol WishListViewDelegate: class {
-    func showEmptyList()
-    func show(books: [Book])
+    func refreshTable()
+    func showDetailsViewFor(book: Book)
 }
 
 class WishlistViewController: BaseViewController<WishListView>, WishListViewDelegate {
     
     private var presenter: WishlistPresenter?
-    private var booksToDisplay: [Book] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +25,14 @@ class WishlistViewController: BaseViewController<WishListView>, WishListViewDele
         mainView.collectionView.register(BookCellView.self, forCellWithReuseIdentifier: BookCellView.identifier)
         mainView.collectionView.alwaysBounceVertical = true
         mainView.collectionView.backgroundColor = .white
+        mainView.collectionView.register(EmptyTableView.self,
+                                         forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                         withReuseIdentifier: EmptyTableView.identifier)
+        
+        navigationItem.title = "Your Wishlist"
+        navigationController?.navigationBar.titleTextAttributes =
+            [.foregroundColor : UIColor.lbBrown]
+        navigationController?.navigationBar.tintColor = .lbBrown
         
         let newLocalDBService = LocalDBService()
         presenter = WishlistPresenter(localDBService: newLocalDBService, view: self)
@@ -40,33 +47,51 @@ class WishlistViewController: BaseViewController<WishListView>, WishListViewDele
         presenter.onViewWillAppear()
     }
     
-    func showEmptyList() {
-        // TODO
-    }
-    
-    func show(books: [Book]) {
-        booksToDisplay = books
+    func refreshTable() {
         mainThread {
             self.mainView.collectionView.reloadData()
         }
+    }
+    
+    func showDetailsViewFor(book: Book) {
+        guard let navigationController = navigationController else {
+            print("Missing SearchNavigationController")
+            return
+        }
+        
+        navigationController.pushViewController(
+            BookDetailsViewController(bookToDisplay: book, isLocal: true),
+            animated: true
+        )
     }
 }
 
 extension WishlistViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return booksToDisplay.count
+        guard let presenter = presenter else {
+            print("WishlistPresenter nil")
+            return 0
+        }
+        return presenter.getBookCount()
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let presenter = presenter else {
+            print("WishlistPresenter nil")
+            return UICollectionViewCell()
+        }
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookCellView.identifier,
                                                             for: indexPath) as? BookCellView else {
                                                                 print("Unable to dequeue BookCellView")
                                                                 return UICollectionViewCell()
         }
         
-        let book = booksToDisplay[indexPath.item]
+        guard let book = presenter.getBookAt(index: indexPath.item) else {
+            print("Attempted to access cached book at invalid index")
+            return UICollectionViewCell()
+        }
         cell.set(
             title: book.getTitle(),
             author: book.getAbbreviatedAuthorSerialString(),
@@ -82,17 +107,29 @@ extension WishlistViewController: UICollectionViewDataSource {
 extension WishlistViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard indexPath.row <= booksToDisplay.count else {
-            print("didSelectItem at a row greater than data count")
+        guard let presenter = presenter else {
+            print("WishlistPresenter nil")
             return
         }
-        guard let navigationController = navigationController else {
-            print("Missing SearchNavigationController")
-            return
-        }
-        let book = booksToDisplay[indexPath.row]
-        navigationController.pushViewController(BookDetailsViewController(bookToDisplay: book, isLocal: true), animated: true)
+        presenter.handleBookClickAt(row: indexPath.row)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
         
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: EmptyTableView.identifier, for: indexPath) as? EmptyTableView else {
+                return UICollectionReusableView()
+            }
+            
+            headerView.setMainText("Try searching for books and saving them!")
+            headerView.setSubText("Your saved books will appear here.")
+            return headerView
+        default:
+            return UICollectionReusableView()
+        }
     }
 }
 
@@ -107,7 +144,7 @@ extension WishlistViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        return UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -120,5 +157,18 @@ extension WishlistViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        guard let presenter = presenter else {
+            print("SearchPresenter nil in ReferenceSizeForHeaderInSection")
+            return CGSize.zero
+        }
+        
+        if presenter.getBookCount() > 0 {
+            return CGSize.zero
+        } else {
+            return CGSize(width: collectionView.frame.width, height: 180.0)
+        }
     }
 }

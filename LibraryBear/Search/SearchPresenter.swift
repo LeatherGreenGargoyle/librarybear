@@ -38,12 +38,7 @@ class SearchPresenter {
     
     func handleSearch(input: String) {
         lastSearchInput = input
-        guard let view = view else {
-            print("ViewDelegate nil in handleSearchError")
-            return
-        }
         guard input.count > 0 else {
-            view.showEmptyList()
             return
         }
         currentSearchBufferTimer?.invalidate()
