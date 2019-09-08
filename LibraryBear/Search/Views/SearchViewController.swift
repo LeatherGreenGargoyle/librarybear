@@ -144,9 +144,13 @@ extension SearchViewController: UICollectionViewDelegate {
             guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: EmptyTableView.identifier, for: indexPath) as? EmptyTableView else {
                 return UICollectionReusableView()
             }
+            guard let searchPresenter = searchPresenter else {
+                print("Missing SearchPresenter on didSelectItemAt")
+                return UICollectionReusableView()
+            }
             
             headerView.setMainText("Try performing a search!")
-            headerView.setSubText("Your results will appear here.")
+            headerView.setSubText(searchPresenter.getEmptyCollectionMessage())
             return headerView
         default:
             return UICollectionReusableView()

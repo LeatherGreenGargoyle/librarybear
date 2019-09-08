@@ -141,7 +141,7 @@ class BookDetailsView: UIScrollView {
         titleDivider.snp.makeConstraints { (make) in
             make.top.equalTo(coverImage.snp.bottom)
             make.centerX.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.8)
+            make.width.equalToSuperview()
             make.height.equalTo(1)
             make.bottom.equalTo(title.snp.top)
         }

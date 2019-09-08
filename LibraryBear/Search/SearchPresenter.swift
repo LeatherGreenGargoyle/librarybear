@@ -16,6 +16,7 @@ class SearchPresenter {
     private var isCurrentlyFetchingMore = false
     private var booksToDisplay: [Book] = []
     private var lastSearchInput = ""
+    private var wereLastResultsEmpty = false
     
     convenience init(libraryService: LibraryService, view: SearchViewDelegate) {
         self.init()
@@ -75,6 +76,10 @@ class SearchPresenter {
         return booksToDisplay.count
     }
     
+    func getEmptyCollectionMessage() -> String {
+        return wereLastResultsEmpty ? "We couldn't find anything for your last search" : "Your results will appear here."
+    }
+    
     private func handleSearchError(error: String) {
         guard let view = view else {
             print("ViewDelegate nil in handleSearchError")
@@ -95,6 +100,9 @@ class SearchPresenter {
         } else {
             booksToDisplay.removeAll()
         }
+        
+        wereLastResultsEmpty = results.isEmpty
+        
         view.refreshTable()
     }
     
