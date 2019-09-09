@@ -11,6 +11,7 @@ import SDWebImage
 import SnapKit
 import UIKit
 
+/// A cell containing the cover image, title, author, and publishing date of a particular book.
 class BookCellView: UICollectionViewCell {
     
     static var identifier: String = "BookViewCell"

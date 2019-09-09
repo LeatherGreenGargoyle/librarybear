@@ -10,6 +10,7 @@ import Foundation
 import SnapKit
 import UIKit
 
+/// A view displaying the cover image and details of a selected book, with an assignable action button.
 class BookDetailsView: UIScrollView {
     private let coverImage: UIImageView = {
         let imageView = UIImageView()

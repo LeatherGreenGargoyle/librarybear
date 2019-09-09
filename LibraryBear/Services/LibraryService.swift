@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A service object handling book queries, and conversion of result data into readable formats.
 class LibraryService {
     
     enum CoverImageSize {
@@ -30,6 +31,13 @@ class LibraryService {
     private var currentPagination = 1
     private var previousInput = ""
     
+    /**
+     Repeats the last-input search string with incremented pagination.
+     
+     - Parameters:
+        - onResult: A callback accepting an array of Book results
+        - onErrorMessage: A callback accepting an error message.
+     */
     func fetchMoreResults(onResult: @escaping BooksCallback, onErrorMessage: @escaping StringCallback) {
         guard previousInput.count > 0 else {
             print("No previous input during 'more' search")
@@ -46,6 +54,15 @@ class LibraryService {
         performSearch(formattedSearchString: formattedInput, onResult: onResult, onErrorMessage: onErrorMessage)
     }
     
+    /**
+     Initiates a query to the openLibrary API using the provided search string.
+     
+     - Parameters:
+        - onResult: A callback accepting an array of Book results
+        - onErrorMessage: A callback accepting an error message.
+     
+     - Returns: A comma-separated list.
+     */
     func fetchResultsOf(searchInput: String, onResult: @escaping BooksCallback, onErrorMessage: @escaping StringCallback) {
         guard searchInput.count > 0 else {
             return
@@ -62,6 +79,16 @@ class LibraryService {
         performSearch(formattedSearchString: formattedInput, onResult: onResult, onErrorMessage: onErrorMessage)
     }
     
+    // TODO: handle long string arrays.
+    /**
+     Converts a result dictionary into a readable Book object. This will truncate excessively-long string
+     arrays which would complicate caching via Realm, and save missing data as "n/a".
+     
+     - Parameters:
+        - document: A dictionary retrieved from the result data from openLibrary
+     
+     - Returns: A formatted book object.
+     */
     private func getBookFrom(document: [String: Any]) -> Book {
         let coverEditionKey = document[KEY_COVER_EDITION_KEY] as? String ?? ""
         let publishYearRaw = document[KEY_FIRST_PUBLISH_YEAR] as? Int
@@ -87,6 +114,14 @@ class LibraryService {
         )
     }
     
+    /**
+     Given a non-200 response code, will return an appropriate descriptive message.
+     
+     - Parameters:
+        - httpStatusCode: A http response status code.
+     
+     - Returns: A string describing the provided error code.
+     */
     private func getErrorMessageFrom(httpStatusCode: Int) -> String {
         switch httpStatusCode {
         case 500...599:
@@ -98,10 +133,27 @@ class LibraryService {
         }
     }
     
+    /**
+     Produces a string URL containing a general query at a particular pagination index.
+     
+     - Parameters:
+        - searchInput: The input search string.
+        - currentPagination: The pagination offset for the desired search results.
+     
+     - Returns: A string URL for the provided query
+     */
     private func getQueryStringFrom(searchInput: String, currentPagination: Int) -> String {
         return searchInput.replacingOccurrences(of: " ", with: "+") + "&page=\(currentPagination)"
     }
     
+    /**
+     Produces a string URL pointing to a cover image for the specified book, of the specified size.
+     
+     - Parameters:
+        - coverEditionKey: A unique key for a particular book edition for which there is a cover
+     
+     - Returns: A string URL pointing to the desired cover image
+     */
     private func getUrlFor(coverEditionKey: String, size: CoverImageSize) -> String? {
         switch size {
         case .small:
@@ -113,6 +165,14 @@ class LibraryService {
         }
     }
     
+    /**
+     A helper function performing the actual http request to the openLibrary API.
+     
+     - Parameters:
+        - formattedSearchString: The provided search string.
+        - onResult: A callback accepting an array of Book results
+        - onErrorMessage: A callback accepting an error message.
+     */
     private func performSearch(formattedSearchString: String, onResult: @escaping BooksCallback, onErrorMessage: @escaping StringCallback) {
         guard let url = URL(string: "http://openlibrary.org/search.json?q=\(formattedSearchString)") else {
             print("Error creating URL from input")

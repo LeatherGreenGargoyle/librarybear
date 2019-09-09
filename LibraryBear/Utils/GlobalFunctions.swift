@@ -12,6 +12,15 @@ func mainThread(_ closure: @escaping () -> ()) {
     DispatchQueue.main.async(execute: closure)
 }
 
+/**
+ Creates a notification observer
+ 
+ - Parameters:
+    - object: The object associated with the Notification
+    - for: The Notification name
+    - _: A callback to be triggered by the notification
+
+ */
 func registerNotification(object: Any? = nil,
                           for name: Notification.Name,
                           _ callback: @escaping (Notification) -> Void) {

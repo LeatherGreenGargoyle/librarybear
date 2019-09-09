@@ -16,6 +16,8 @@ protocol SearchViewDelegate: class {
     func scrollToTop()
 }
 
+/// ViewController managing the search result CollectionView, error message display, BookDetails presentation,
+/// and search UI.
 class SearchViewController: BaseViewController<SearchView>, SearchViewDelegate, UITextFieldDelegate {
 
     private var searchPresenter: SearchPresenter?
@@ -58,6 +60,12 @@ class SearchViewController: BaseViewController<SearchView>, SearchViewDelegate, 
         }
     }
     
+    /**
+     Presents the BookDetails view with further details for the provided book.
+     
+     - Parameters:
+        - book: The selected book.
+     */
     func showDetailsViewFor(book: Book) {
         guard let navigationController = navigationController else {
             print("Missing SearchNavigationController")

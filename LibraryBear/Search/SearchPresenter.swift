@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// Presenter class handling user search inputs, book selection, querying for paginated results, and model
+/// access.
 class SearchPresenter {
     
     private var currentSearchBufferTimer: Timer?
@@ -25,6 +27,12 @@ class SearchPresenter {
         self.view = view
     }
     
+    /**
+     A handler for SearchView collection result clicks, which will display the BookDetailsView.
+     
+     - Parameters:
+        - row: The position of the selected book within the CollectionView
+     */
     func handleBookClickAt(row: Int) {
         guard let view = view else {
             print("ViewDelegate nil in handleBookClick")
@@ -39,6 +47,13 @@ class SearchPresenter {
         view.showDetailsViewFor(book: book)
     }
     
+    /**
+     A handler for user search inputs, which will trigger API calls with a staggered time buffer to
+     prevent extraneous calls.
+     
+     - Parameters:
+        - input: The provided search string.
+     */
     func handleSearch(input: String) {
         lastSearchInput = input
         guard input.count > 0 else {
@@ -55,6 +70,13 @@ class SearchPresenter {
         })
     }
     
+    /**
+     A handler which will trigger when the user has neared the end of the currently-displayed book results,
+     and which will then trigger a paginated query to the library API.
+     
+     - Parameters:
+        - row: The position of the just-displayed Book item, within the CollectionView
+     */
     func handleWillDisplay(row: Int) {
         let shouldFetchMore = row >= (max(booksToDisplay.count - 20, 0))
         guard shouldFetchMore, !isCurrentlyFetchingMore else {
@@ -82,6 +104,9 @@ class SearchPresenter {
         return wereLastResultsEmpty ? "We couldn't find anything for your last search" : "Your results will appear here."
     }
     
+    /**
+     An error handler which will remove all queried books and display an empty view and error message.
+     */
     private func handleSearchError(error: String) {
         guard let view = view else {
             print("ViewDelegate nil in handleSearchError")
@@ -92,6 +117,14 @@ class SearchPresenter {
         view.showSearchErrorAlert(message: "Hmm...", title: "We couldn't complete your search right now, please try again later.")
     }
     
+    /**
+     Handler for Book query results, which will save the books as a local property, or remove them in the
+     event of a query with no results. Then triggers a collectionView refresh and scrolls the view to the
+     top.
+     
+     - Parameters:
+        - results: An array containing the book results.
+     */
     private func handleSearchQuery(results: [Book]) {
         guard let view = view else {
             print("ViewDelegate nil in handleSearchError")
@@ -109,6 +142,13 @@ class SearchPresenter {
         view.scrollToTop()
     }
     
+    /**
+     Handler for a paginated book query, which appends the results to the locally-stored books property,
+     and refresh the view.
+     
+     - Parameters:
+        - formattedSearchString: An array containing the book results.
+     */
     private func handleMore(results: [Book]) {
         guard let view = view else {
             print("ViewDelegate nil in handleSearchError")

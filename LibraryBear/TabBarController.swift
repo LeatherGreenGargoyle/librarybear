@@ -14,6 +14,7 @@ enum TabIndex: Int {
     case search = 0, wishlist
 }
 
+/// Class containing NavigationControllers for all displayed main pages.
 class TabBarController: UITabBarController, UITabBarControllerDelegate {
     private let searchViewController = SearchViewController()
     private let wishListViewController = WishlistViewController()

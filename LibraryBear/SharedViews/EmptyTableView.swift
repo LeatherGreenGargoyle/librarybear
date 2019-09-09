@@ -10,6 +10,7 @@ import Foundation
 import SnapKit
 import UIKit
 
+/// A reusable view displaying a main and subtitle message.
 class EmptyTableView: UICollectionReusableView {
     
     static var identifier: String = "EmptyTableCellView"

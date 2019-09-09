@@ -8,13 +8,7 @@
 
 import Foundation
 
-/*
-    So what should this look like?
-        - onAttachView, we should query realm
-        - we get the results, hand them to VC
-        - VC reloads the table
- */
-
+/// Presenter managing access to the local Book cache and Book selection.
 class WishlistPresenter {
     
     private var localDBService: LocalDBService?
@@ -46,6 +40,14 @@ class WishlistPresenter {
         return booksToDisplay.count
     }
     
+    /**
+     Returns the Book at the specified index
+     
+     - Parameters:
+        - index: The index of the selected book within the CollectionView.
+     
+     - Returns: The specified book, if it exists
+     */
     func getBookAt(index: Int) -> Book? {
         guard index < booksToDisplay.count else {
             return nil
@@ -54,6 +56,12 @@ class WishlistPresenter {
         return booksToDisplay[index]
     }
     
+    /**
+     Handler for book selection, which triggers the display of the BookDetails view.
+     
+     - Parameters:
+        - row: The index of the selected book
+     */
     func handleBookClickAt(row: Int) {
         guard let view = wishlistView else {
             print("ViewDelegate nil in handleBookClick")

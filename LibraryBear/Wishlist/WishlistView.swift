@@ -10,6 +10,7 @@ import Foundation
 import SnapKit
 import UIKit
 
+/// A view containing a single collectionView.
 class WishListView: UIView {
     // MARK: Subviews
     let collectionView: UICollectionView = {

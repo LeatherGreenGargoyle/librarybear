@@ -8,6 +8,11 @@
 import UIKit
 
 extension Array where Element == String {
+    /**
+     Helper function formatting the given string as a comma-separated list.
+     
+     - Returns: A comma-separated list
+     */
     func getSerialString() -> String {
         var combinedString = "n/a"
         for (index, element) in self.enumerated() {
@@ -56,6 +61,14 @@ extension UIView {
         }
     }
     
+    /**
+     Rounds the specified corners of the given view. Should be called in layoutSubviews, or when the
+     specified view's frame is available.
+     
+     - Parameters:
+        - _: The corners which should be rounded
+        - radius: The desired corner radius
+     */
     func setRoundCorners(_ corners: UIRectCorner, radius: CGFloat) {
         let path = UIBezierPath(roundedRect: self.bounds,
                                 byRoundingCorners: corners,
@@ -72,6 +85,9 @@ extension UIViewController {
         view.endEditing(true)
     }
     
+    /**
+     Helper function which uses a TapGestureRecognizer to dismiss any displayed keyboards on screen tap.
+     */
     func hideKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self,
                                                                  action: #selector(UIViewController.dismissKeyboard))
@@ -79,6 +95,16 @@ extension UIViewController {
         view.addGestureRecognizer(tap)
     }
     
+    /**
+     Helper function which displays an alert with title, message, optional button title, and optional button
+     handler.
+     
+     - Parameters:
+        - title: The alert title
+        - message: The alert message
+        - buttonTitle: The button title
+        - buttonHandler: A callback for the button
+     */
     func showAlert(title: String,
                    message: String = "",
                    buttonTitle: String = "OK",

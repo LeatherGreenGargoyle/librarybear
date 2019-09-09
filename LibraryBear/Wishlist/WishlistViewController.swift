@@ -14,6 +14,7 @@ protocol WishListViewDelegate: class {
     func showDetailsViewFor(book: Book)
 }
 
+/// ViewController responsible for CollectionView management and BookDetails presentation.
 class WishlistViewController: BaseViewController<WishListView>, WishListViewDelegate {
     
     private var presenter: WishlistPresenter?
@@ -53,6 +54,12 @@ class WishlistViewController: BaseViewController<WishListView>, WishListViewDele
         }
     }
     
+    /**
+     Presents a view containing further details of a selected book
+     
+     - Parameters:
+        - book: The selected book
+     */
     func showDetailsViewFor(book: Book) {
         guard let navigationController = navigationController else {
             print("Missing SearchNavigationController")

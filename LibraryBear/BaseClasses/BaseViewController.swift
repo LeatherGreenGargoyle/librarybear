@@ -10,6 +10,8 @@ import Foundation
 import SnapKit
 import UIKit
 
+/// A base class with an associated generic mainView, with default white background color, and helper
+/// functions to deal with proper keyboard UI.
 class BaseViewController<V: UIView>: UIViewController {
     private let KEYBOARD_OFFSET     = UIScreen.main.bounds.height * 0.39
     
@@ -52,12 +54,6 @@ class BaseViewController<V: UIView>: UIViewController {
         NotificationCenter.default.removeObserver(self,
                                                   name: UIResponder.keyboardWillHideNotification,
                                                   object: self.view.window)
-        NotificationCenter.default.removeObserver(self,
-                                                  name: UIApplication.didBecomeActiveNotification,
-                                                  object: self.view.window)
-        NotificationCenter.default.removeObserver(self,
-                                                  name: UIApplication.willResignActiveNotification,
-                                                  object: self.view.window)
     }
     
     //MARK: - Overrides
@@ -65,6 +61,12 @@ class BaseViewController<V: UIView>: UIViewController {
         view.endEditing(true)
     }
     
+    /**
+     Adjusts the current view to accommodate the space taken up by the appearance of the keyboard.
+     
+     - Parameters:
+        - notification: The Notification object triggering this method
+     */
     func keyboardWillShow(notification: Notification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 && !keyboardPresented {
@@ -74,6 +76,12 @@ class BaseViewController<V: UIView>: UIViewController {
         }
     }
     
+    /**
+     Adjusts the current view to accommodate the new space produced by the hiding of the keyboard.
+     
+     - Parameters:
+        - notification: The Notification object triggering this method
+     */
     func keyboardWillHide(notification: Notification) {
         if self.view.frame.origin.y != 0 && keyboardPresented {
             self.view.frame.origin.y = 0

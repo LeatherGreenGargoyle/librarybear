@@ -10,6 +10,7 @@ import Foundation
 import SnapKit
 import UIKit
 
+/// View containing a searchbar and CollectionView.
 class SearchView: UIView {
     // MARK: Subviews
     let searchImage: UIImageView = {

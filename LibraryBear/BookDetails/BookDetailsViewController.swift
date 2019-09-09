@@ -18,6 +18,7 @@ protocol BookDetailsViewDelegate: class {
     func showActionSuccessAlert(message: String, title: String, then callback: @escaping Callback)
 }
 
+/// A ViewController responsible for displaying book details and success / error messages after user action
 class BookDetailsViewController: BaseViewController<BookDetailsView>, BookDetailsViewDelegate {
     
     private var bookDetailsPresenter: BookDetailsPresenter?

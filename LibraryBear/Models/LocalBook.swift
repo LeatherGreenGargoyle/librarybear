@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 
+/// A cached book object.
 @objcMembers class LocalBook: Object, Book {
 
     @objc private dynamic var id: String!
@@ -56,6 +57,11 @@ import RealmSwift
         publisherSerialString = book.getPublishersSerialString()
     }
     
+    /**
+     Displays only the first two listed authors, with 'et al' attached if there are more than two.
+     
+     - Returns: An abbreviated string describing only the first two authors of a book.
+     */
     func getAbbreviatedAuthorSerialString() -> String {
         if let firstAuthor = authors.first, authors.count > 2 {
             return "\(firstAuthor), et al"
@@ -64,18 +70,38 @@ import RealmSwift
         }
     }
     
+    /**
+     Displays a comma-separated list of author names.
+     
+     - Returns: A comma-separated list.
+     */
     func getAuthorSerialString() -> String {
         return authorSerialString
     }
     
+    /**
+     Displays a comma-separated list of ISBN numbers.
+     
+     - Returns: A comma-separated list.
+     */
     func getISBNSerialString() -> String {
         return isbnSerialString
     }
     
+    /**
+     Displays a comma-separated list of contributors.
+     
+     - Returns: A comma-separated list.
+     */
     func getContributorSerialString() -> String {
         return contributorSerialString
     }
     
+    /**
+     Displays a comma-separated list of publishers.
+     
+     - Returns: A comma-separated list.
+     */
     func getPublishersSerialString() -> String {
         return publisherSerialString
     }

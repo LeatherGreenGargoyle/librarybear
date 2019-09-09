@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A presenter handling book caching/uncaching and BookDetails display,
 class BookDetailsPresenter {
     private var cachedBook: Book?
     private var isLocal: Bool = false
@@ -50,6 +51,10 @@ class BookDetailsPresenter {
         viewDelegate.setButton(title: buttonTitle)
     }
     
+    /**
+     Handles the action button click received from the BookDetails view. Depending on the context,
+     will cache the book if it is not already cached, or remove the book from the cache.
+     */
     func handleButtonClick() {
         if isLocal, let book = cachedBook as? LocalBook {
             removeFromCache(book: book)
@@ -63,6 +68,12 @@ class BookDetailsPresenter {
         }
     }
     
+    /**
+     Caches a NonLocalBook object, then displays a confirmation or error message through the view.
+     
+     - Parameters:
+        - book: The NonLocalBook object to be cached.
+     */
     private func cache(book: NonLocalBook) {
         guard let localDBService = localDBService else {
             print("LocalDBService nil")
@@ -102,6 +113,12 @@ class BookDetailsPresenter {
         }
     }
     
+    /**
+     Uncaches the LocalBook, and displays a confirmation / error message through the view.
+     
+     - Parameters:
+        - book: The LocalBook object to be uncached.
+     */
     private func removeFromCache(book: LocalBook) {
         guard let localDBService = localDBService else {
             print("LocalDBService nil")

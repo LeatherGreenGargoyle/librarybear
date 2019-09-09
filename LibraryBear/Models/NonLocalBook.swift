@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A protocol defining all necessary behavior for displaying book information.
 protocol Book {
     func getId() -> String
     func getNumberOfEditions() -> String
@@ -23,6 +24,7 @@ protocol Book {
     func getPublishersSerialString() -> String
 }
 
+/// A non-cached book object.
 struct NonLocalBook: Book {
 
     let title: String
@@ -49,6 +51,11 @@ struct NonLocalBook: Book {
         return authors.getSerialString()
     }
     
+    /**
+     Displays only the first two listed authors, with 'et al' attached if there are more than two.
+     
+     - Returns: An abbreviated string describing only the first two authors of a book.
+     */
     func getAbbreviatedAuthorSerialString() -> String {
         if let firstAuthor = authors.first, authors.count > 2 {
             return "\(firstAuthor), et al"
@@ -57,14 +64,29 @@ struct NonLocalBook: Book {
         }
     }
     
+    /**
+     Displays a comma-separated list of ISBN numbers
+     
+     - Returns: A comma-separated list.
+     */
     func getISBNSerialString() -> String {
         return isbnNumbers.getSerialString()
     }
     
+    /**
+     Displays a comma-separated list of contributor names.
+     
+     - Returns: A comma-separated list.
+     */
     func getContributorSerialString() -> String {
         return contributors.getSerialString()
     }
     
+    /**
+     Displays a comma-separated list of publisher names.
+     
+     - Returns: A comma-separated list.
+     */
     func getPublishersSerialString() -> String {
         return publishers.getSerialString()
     }
@@ -102,6 +124,11 @@ struct NonLocalBook: Book {
         return firstPublished
     }
     
+    /**
+     Gives a unique identifier for this book composed of the book ISBN, publish date, and title.
+     
+     - Returns: A unique identifier string.
+     */
     func getId() -> String {
         return getISBNSerialString() + getFirstPublished() + getTitle()
     }

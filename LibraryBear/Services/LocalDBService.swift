@@ -15,7 +15,16 @@ enum LocalDBError: String {
     case failedToDelete
 }
 
+/// A Service class handling the caching of NonLocalBook objects, and uncaching / retrieval of LocalBook objects.
 class LocalDBService {
+    /**
+     Saves the provided book to the local database.
+     
+     - Parameters:
+        - book: The NonLocalBook object to save
+        - callback: A callback accepting an array of Book results
+     - onErrorMessage: A callback accepting a success boolean and optional error type.
+     */
     func cache(book: NonLocalBook, callback: LocalDBSuccessCallback) {
         guard let realm = getRealm() else {
             return
@@ -39,6 +48,11 @@ class LocalDBService {
         }
     }
     
+    /**
+     Retrieves all cached books from the local database.
+     
+     - Returns: An array of all cached books.
+     */
     func getCachedBooks() -> [Book]? {
         guard let realm = getRealm() else {
             return nil
@@ -49,6 +63,12 @@ class LocalDBService {
         }
     }
     
+    /**
+     Retrieves a cached Book with the provided ID.
+     
+     - Parameters:
+        - withId: The string ID of the specified book.
+     */
     func getBook(withId id: String) -> Book? {
         guard let realm = getRealm() else {
             return nil
@@ -58,6 +78,13 @@ class LocalDBService {
         return results.first
     }
     
+    /**
+     Removes the provided book from the local database.
+     
+     - Parameters:
+     - book: The book to remove
+     - callback: A callback accepting a success/failure boolean and optional error type.
+     */
     func removeCached(book: LocalBook, callback: LocalDBSuccessCallback) {
         guard let realm = getRealm() else {
             return
