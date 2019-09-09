@@ -21,7 +21,8 @@ class WishListView: UIView {
         super.init(frame: frame)
         self.addSubviews([collectionView])
         collectionView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.top.equalToSuperview().offset(8)
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
     

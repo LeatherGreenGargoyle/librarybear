@@ -11,3 +11,12 @@ import Foundation
 func mainThread(_ closure: @escaping () -> ()) {
     DispatchQueue.main.async(execute: closure)
 }
+
+func registerNotification(object: Any? = nil,
+                          for name: Notification.Name,
+                          _ callback: @escaping (Notification) -> Void) {
+    NotificationCenter.default.addObserver(forName: name,
+                                           object: object,
+                                           queue: nil,
+                                           using: callback)
+}

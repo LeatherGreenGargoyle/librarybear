@@ -12,6 +12,7 @@ class SearchPresenter {
     
     private var currentSearchBufferTimer: Timer?
     private var libraryService: LibraryService?
+    private var localDBService: LocalDBService?
     private weak var view: SearchViewDelegate?
     private var isCurrentlyFetchingMore = false
     private var booksToDisplay: [Book] = []
@@ -34,6 +35,7 @@ class SearchPresenter {
             return
         }
         let book = booksToDisplay[row]
+        
         view.showDetailsViewFor(book: book)
     }
     
@@ -54,7 +56,7 @@ class SearchPresenter {
     }
     
     func handleWillDisplay(row: Int) {
-        let shouldFetchMore = row >= booksToDisplay.count - 20
+        let shouldFetchMore = row >= (max(booksToDisplay.count - 20, 0))
         guard shouldFetchMore, !isCurrentlyFetchingMore else {
             return
         }
@@ -104,6 +106,7 @@ class SearchPresenter {
         wereLastResultsEmpty = results.isEmpty
         
         view.refreshTable()
+        view.scrollToTop()
     }
     
     private func handleMore(results: [Book]) {

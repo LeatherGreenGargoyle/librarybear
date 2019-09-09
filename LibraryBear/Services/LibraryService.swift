@@ -68,16 +68,23 @@ class LibraryService {
         let publishYearString = publishYearRaw != nil ? "\(publishYearRaw!)" : "n/a"
         let numberOfEditionsRaw = document[KEY_EDITION_COUNT] as? Int
         let numberOfEditionsString = numberOfEditionsRaw != nil ? "\(numberOfEditionsRaw!)" : "n/a"
+        
+        let truncatedISBNNumbers = Array((document[KEY_ISBN] as? [String] ?? []).prefix(100))
+        let truncatedAuthors = Array((document[KEY_AUTHOR_NAME] as? [String] ?? []).prefix(100))
+        let truncatedContributors = Array((document[KEY_CONTRIBUTOR] as? [String] ?? []).prefix(100))
+        let truncatedPublishers = Array((document[KEY_CONTRIBUTOR] as? [String] ?? []).prefix(100))
+        
         return NonLocalBook(title: document[KEY_TITLE] as? String ?? "n/a",
-                    authors: (document[KEY_AUTHOR_NAME] as? [String]) ?? [],
+                    authors: truncatedAuthors,
                     firstPublished: publishYearString,
                     largeCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .large),
                     mediumCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .medium),
                     smallCoverURL: getUrlFor(coverEditionKey: coverEditionKey, size: .small),
-                    isbnNumbers: document[KEY_ISBN] as? [String] ?? [],
-                    contributors: document[KEY_CONTRIBUTOR] as? [String] ?? [],
+                    isbnNumbers: truncatedISBNNumbers,
+                    contributors: truncatedContributors,
                     numberOfEditions: numberOfEditionsString,
-                    publishers: document[KEY_PUBLISHER] as? [String] ?? [])
+                    publishers: truncatedPublishers
+        )
     }
     
     private func getErrorMessageFrom(httpStatusCode: Int) -> String {

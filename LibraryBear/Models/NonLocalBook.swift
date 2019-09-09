@@ -9,6 +9,7 @@
 import Foundation
 
 protocol Book {
+    func getId() -> String
     func getNumberOfEditions() -> String
     func getTitle() -> String
     func getFirstPublished() -> String
@@ -99,5 +100,9 @@ struct NonLocalBook: Book {
     
     func getFirstPublished() -> String {
         return firstPublished
+    }
+    
+    func getId() -> String {
+        return getISBNSerialString() + getFirstPublished() + getTitle()
     }
 }

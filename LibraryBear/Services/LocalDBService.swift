@@ -23,7 +23,7 @@ class LocalDBService {
         
         let newLocalBook = LocalBook(book: book)
         
-        guard getBook(withId: book.getISBNSerialString()) == nil else {
+        guard getBook(withId: book.getId()) == nil else {
             callback(false, .alreadySaved)
             return
         }
@@ -49,6 +49,15 @@ class LocalDBService {
         }
     }
     
+    func getBook(withId id: String) -> Book? {
+        guard let realm = getRealm() else {
+            return nil
+        }
+        
+        let results = realm.objects(LocalBook.self).filter("id = '\(id)'")
+        return results.first
+    }
+    
     func removeCached(book: LocalBook, callback: LocalDBSuccessCallback) {
         guard let realm = getRealm() else {
             return
@@ -72,14 +81,5 @@ class LocalDBService {
             print("Error attempting to instantiate Realm \(error.localizedDescription)")
             return nil
         }
-    }
-    
-    private func getBook(withId id: String) -> Book? {
-        guard let realm = getRealm() else {
-            return nil
-        }
-        
-        let results = realm.objects(LocalBook.self).filter("id = '\(id)'")
-        return results.first
     }
 }

@@ -22,7 +22,7 @@ class BookDetailsViewController: BaseViewController<BookDetailsView>, BookDetail
     
     private var bookDetailsPresenter: BookDetailsPresenter?
     
-    convenience init(bookToDisplay: Book, isLocal: Bool) {
+    convenience init(bookToDisplay: Book) {
         self.init()
         
         let newLocalDBService = LocalDBService()
@@ -30,8 +30,7 @@ class BookDetailsViewController: BaseViewController<BookDetailsView>, BookDetail
         let newBookDetailsPresenter = BookDetailsPresenter(
             localDBService: newLocalDBService,
             book: bookToDisplay,
-            delegate: self,
-            isLocal: isLocal
+            delegate: self
         )
         bookDetailsPresenter = newBookDetailsPresenter
         

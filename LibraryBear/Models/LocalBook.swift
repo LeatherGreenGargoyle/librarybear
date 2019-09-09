@@ -42,7 +42,7 @@ import RealmSwift
     convenience init(book: NonLocalBook) {
         self.init()
         
-        id = book.getISBNSerialString()
+        id = book.getId()
         authors.append(objectsIn: book.authors)
         title = book.getTitle()
         authorSerialString = book.getAuthorSerialString()
@@ -111,6 +111,10 @@ import RealmSwift
     
     func getFirstPublished() -> String {
         return firstPublished
+    }
+    
+    func getId() -> String {
+        return getISBNSerialString() + getFirstPublished() + getTitle()
     }
 }
 

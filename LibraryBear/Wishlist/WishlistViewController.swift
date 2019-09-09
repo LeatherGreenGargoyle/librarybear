@@ -60,7 +60,7 @@ class WishlistViewController: BaseViewController<WishListView>, WishListViewDele
         }
         
         navigationController.pushViewController(
-            BookDetailsViewController(bookToDisplay: book, isLocal: true),
+            BookDetailsViewController(bookToDisplay: book),
             animated: true
         )
     }

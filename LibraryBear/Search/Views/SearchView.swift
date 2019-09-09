@@ -17,6 +17,7 @@ class SearchView: UIView {
         let image = UIImage(named: "icon_search")
         imageView.contentMode = .scaleAspectFit
         imageView.image = image
+        imageView.tintColor = .lbBrown
         return imageView
     }()
     let searchField: UITextField = {
@@ -24,6 +25,7 @@ class SearchView: UIView {
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no
         textField.placeholder = "Let's find a book!"
+        textField.textColor = .lbBrown
         return textField
     }()
     let collectionView: UICollectionView = {

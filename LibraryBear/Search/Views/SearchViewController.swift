@@ -13,9 +13,10 @@ protocol SearchViewDelegate: class {
     func refreshTable()
     func showSearchErrorAlert(message: String, title: String)
     func showDetailsViewFor(book: Book)
+    func scrollToTop()
 }
 
-class SearchViewController: BaseViewController<SearchView>, SearchViewDelegate {
+class SearchViewController: BaseViewController<SearchView>, SearchViewDelegate, UITextFieldDelegate {
 
     private var searchPresenter: SearchPresenter?
     
@@ -64,9 +65,24 @@ class SearchViewController: BaseViewController<SearchView>, SearchViewDelegate {
         }
         
         navigationController.pushViewController(
-            BookDetailsViewController(bookToDisplay: book, isLocal: false),
+            BookDetailsViewController(bookToDisplay: book),
             animated: true
         )
+    }
+    
+    func scrollToTop() {
+        mainThread {
+            self.mainView.collectionView.setContentOffset(CGPoint.zero, animated: true)
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        mainView.searchField.resignFirstResponder()
     }
     
     @objc private func searchInputted(_ textField: UITextField) {
@@ -103,7 +119,8 @@ extension SearchViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         guard let book = searchPresenter.getFetchedBook(at: indexPath.row) else {
-            return UICollectionViewCell()
+            print("Book nil in cellForItemAt")
+            return cell
         }
         
         defer {

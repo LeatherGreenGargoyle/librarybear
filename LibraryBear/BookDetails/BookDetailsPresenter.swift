@@ -9,24 +9,27 @@
 import Foundation
 
 class BookDetailsPresenter {
+    private var cachedBook: Book?
+    private var isLocal: Bool = false
     private var localDBService: LocalDBService?
     private weak var viewDelegate: BookDetailsViewDelegate?
     private var selectedBook: Book?
-    private var isLocal: Bool = false
     
-    convenience init(localDBService: LocalDBService, book: Book, delegate: BookDetailsViewDelegate, isLocal: Bool) {
+    convenience init(localDBService: LocalDBService, book: Book, delegate: BookDetailsViewDelegate) {
         self.init()
         self.localDBService = localDBService
         self.viewDelegate = delegate
         self.selectedBook = book
-        self.isLocal = isLocal
+        
+        self.cachedBook = localDBService.getBook(withId: book.getId())
+        self.isLocal = self.cachedBook != nil
         
         onAttachView()
     }
     
     func onAttachView() {
         guard let selectedBook = self.selectedBook, let viewDelegate = self.viewDelegate else {
-            print("BookDetailsPresenter error, selectedBook present? \(self.selectedBook != nil), viewDelegate present? \(self.viewDelegate != nil)")
+            print("BookDetailsPresenter error, selectedBook present? \(self.selectedBook != nil),viewDelegate present? \(self.viewDelegate != nil)")
             return
         }
         
@@ -37,7 +40,8 @@ class BookDetailsPresenter {
             publishersList: selectedBook.getPublishersSerialString(),
             publishingDate: selectedBook.getFirstPublished(),
             contributorsList: selectedBook.getContributorSerialString(),
-            numberOfEditions: selectedBook.getNumberOfEditions())
+            numberOfEditions: selectedBook.getNumberOfEditions()
+        )
         
         if let url = selectedBook.getLargeCoverURL() {
             viewDelegate.setCover(url: url)
@@ -47,7 +51,7 @@ class BookDetailsPresenter {
     }
     
     func handleButtonClick() {
-        if isLocal, let book = selectedBook as? LocalBook {
+        if isLocal, let book = cachedBook as? LocalBook {
             removeFromCache(book: book)
         } else if !isLocal, let book = selectedBook as? NonLocalBook {
             cache(book: book)

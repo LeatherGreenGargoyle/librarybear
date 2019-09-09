@@ -122,14 +122,11 @@ class BookDetailsView: UIScrollView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubviews([coverImage,
-                          titleDivider,
-                          title,
-                          subtitleContainer,
-                          isbnLabel, isbnList, contributorsLabel, contributorsList, isbnMarginBottom,
-                          contributorMarginBottom,
-                          publishersLabel, publishersList, publishersMarginBottom,
-                          actionButton])
+        self.addSubviews([coverImage, titleDivider, title, subtitleContainer, isbnLabel,
+                          isbnList, contributorsLabel, contributorsList, isbnMarginBottom,
+                          contributorMarginBottom, publishersLabel, publishersList,
+                          publishersMarginBottom, actionButton
+        ])
         subtitleContainer.addSubviews([author, publishingDate, numberOfEditions])
         
         coverImage.snp.makeConstraints { (make) in
@@ -155,24 +152,24 @@ class BookDetailsView: UIScrollView {
             make.top.equalTo(title.snp.bottom)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(0.8)
-            make.height.equalTo(65)
+            make.height.equalTo(100)
             make.bottom.equalTo(contributorsLabel.snp.top)
         }
-            author.snp.makeConstraints { (make) in
-                make.top.equalToSuperview()
-                make.centerX.equalToSuperview()
-                make.bottom.equalTo(publishingDate.snp.top)
-            }
-            publishingDate.snp.makeConstraints { (make) in
-                make.top.equalTo(author.snp.bottom)
-                make.centerX.equalToSuperview()
-                make.bottom.equalTo(numberOfEditions.snp.top)
-            }
-            numberOfEditions.snp.makeConstraints { (make) in
-                make.top.equalTo(publishingDate.snp.bottom)
-                make.centerX.equalToSuperview()
-            }
-        
+        author.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.width.equalToSuperview().multipliedBy(0.8)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(publishingDate.snp.top)
+        }
+        publishingDate.snp.makeConstraints { (make) in
+            make.top.equalTo(author.snp.bottom)
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(numberOfEditions.snp.top)
+        }
+        numberOfEditions.snp.makeConstraints { (make) in
+            make.top.equalTo(publishingDate.snp.bottom)
+            make.centerX.equalToSuperview()
+        }
         contributorsLabel.snp.makeConstraints { (make) in
             make.top.equalTo(subtitleContainer.snp.bottom)
             make.centerX.equalToSuperview()
